@@ -1,0 +1,64 @@
+-- Banco d dados
+-- t1 - create -> user(id, nome, cpf, birth_date, fone, email, login, password, departament) - tabela usuarios
+-- t2 - create -> group_prod(id, name_group) - tabela de grupos
+-- t3 - create -> prod(id, name, bar_code, type, value, description) - tabelas produtos
+-- t4 - create -> stock(id, id_prod, id_group) - tabela estoque relacionamento grupo e produtos *
+-- t5 - create -> sale(id, valor, qnt, id_prod,format_payment) - tabela vendas relacionamento produtos
+
+CREATE DATABASE bd_system;
+
+use bd_system;
+
+CREATE TABLE bd_system.users (
+ id integer(10) AUTO_INCREMENT,
+ name_user VARCHAR(40) NOT NULL,
+ cpf VARCHAR(12) NOT NULL,
+ birth_date DATE NOT NULL,
+ fone VARCHAR(10),
+ email VARCHAR(40),
+ login_user VARCHAR(40) NOT NULL,
+ password VARCHAR(40) NOT NULL,
+ departament VARCHAR(30),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.group_prod (
+ id_group integer(10) NOT NULL AUTO_INCREMENT,
+ name_group VARCHAR(40) NOT NULL,
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_group))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.prod (
+ id_prod integer(10) NOT NULL AUTO_INCREMENT,
+ name_prod VARCHAR(50) NOT NULL,
+ bar_code VARCHAR(11) NOT NULL,
+ type_prod VARCHAR(40),
+ value_prod VARCHAR(20),
+ description_prod TEXT,
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_prod))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.stock (
+ id integer(10) NOT NULL AUTO_INCREMENT,
+ idProd int(10) NOT NULL,
+ idGroup int(10) NOT NULL,
+ PRIMARY KEY (id),
+ FOREIGN KEY (idProd) REFERENCES bd_system.prod(id_prod),
+ FOREIGN KEY (idGroup) REFERENCES bd_system.group_prod(id_group))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.sale (
+ id integer(10) NOT NULL AUTO_INCREMENT,
+ values_prod VARCHAR(20),
+ qnt_sales VARCHAR(20),
+ format_payment VARCHAR(30),
+ idProd int(10) NOT NULL,
+ PRIMARY KEY (id),
+ FOREIGN KEY (idProd) REFERENCES bd_system.prod(id_prod))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
