@@ -1,7 +1,7 @@
 -- Banco d dados
 -- t1 - create -> user(id, nome, cpf, birth_date, fone, email, login, password, departament) - tabela usuarios
 -- t2 - create -> group_prod(id, name_group) - tabela de grupos
--- t3 - create -> prod(id, name, bar_code, type, value, description) - tabelas produtos
+-- t3 - create -> prod(id, name_prod, bar_code, group_prod, value_prod) - tabelas produtos
 -- t4 - create -> stock(id, id_prod, id_group) - tabela estoque relacionamento grupo e produtos *
 -- t5 - create -> sale(id, valor, qnt, id_prod,format_payment) - tabela vendas relacionamento produtos
 
@@ -35,10 +35,9 @@ CREATE TABLE bd_system.group_prod (
 CREATE TABLE bd_system.prod (
  id_prod integer(10) NOT NULL AUTO_INCREMENT,
  name_prod VARCHAR(50) NOT NULL,
- bar_code VARCHAR(11) NOT NULL,
- type_prod VARCHAR(40),
- value_prod VARCHAR(20),
- description_prod TEXT,
+ bar_code VARCHAR(13) NOT NULL,
+ group_prod VARCHAR(40),
+ value_prod DECIMAL(10.2),
  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
  PRIMARY KEY (id_prod))

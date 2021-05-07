@@ -202,66 +202,93 @@ def Register_Prod(event=None):
     def Title_Prod(event=None):
         Var_Nome_Prod.set(EntNome_Prod.get().title())
 
+    def Value_Prod(event=None):
+        VarPreco_Prod.set("")
+        EntPreco_Prod.focus()
+
+    def Max_Dig_Code(event=None):
+        if len(Var_Cod_Barras.get()) == 13:
+            EntNome_Prod.focus()
+
+    def Next_Prod():
+        Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+        Cursor_Prod = Conexao.cursor()
+        Cursor_Prod.execute("SELECT MAX(ID_PROD) FROM PROD")
+        global Maximo_Prod
+        Maximo_Prod = ""
+        for e in Cursor_Prod.fetchall():
+            if e[0] == None:
+                Maximo_Prod = "1"
+            else:
+                Maximo_Prod = int(e[0]) + 1
+        Conexao.close()
+
     def Salvar_Produto(event=None):
 
-        try:
-            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
-            Lista_ID_Prod = []
+        Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+        Lista_ID_Prod = []
 
-            # Verificando se há campos em Branco
-            if Var_Cod_Barras.get() == "" or Var_Nome_Prod.get() == "" or VarGroup_Prod.get() == "SELECIONE" or\
-                    VarPreco.get() == "":
-                messagebox.showinfo("ERROR", "HÁ DADOS FALTANDO", parent=Windows_Cad_Prod)
+        # Verificando se há campos em Branco
+        if Var_Cod_Barras.get() == "" or Var_Nome_Prod.get() == "" or VarGroup_Prod.get() == "SELECIONE" or\
+                VarPreco_Prod.get() == "":
+            messagebox.showinfo("ERROR", "HÁ DADOS FALTANDO", parent=Windows_Cad_Prod)
 
-            else:
-                Cursor_Exist_Prod = Conexao.cursor()
-                Cursor_Exist_Prod.execute("SELECT BAR_CODE FROM PROD")
-                for ind in Cursor_Exist_Prod.fetchall():
-                    Lista_ID_Prod.append(int(ind[0]))
+        else:
+            Cursor_Exist_Prod = Conexao.cursor()
+            Cursor_Exist_Prod.execute("SELECT BAR_CODE FROM PROD")
+            for ind in Cursor_Exist_Prod.fetchall():
+                Lista_ID_Prod.append(int(ind[0]))
 
-                Codigo = int(Var_Cod_Barras.get())
+            Codigo = int(Var_Cod_Barras.get())
 
-                if Codigo not in Lista_ID_Prod:
-                    # Verificando qual Banco de Dados será gravado
-                    Confirmacao = messagebox.askyesno("CONFIRMAÇÃO", "DESEJA CADASTRAR O PRODUTO\n"
-                                                                     f"{Var_Nome_Prod.get()}?")
-                    if Confirmacao == True:
+            if Codigo not in Lista_ID_Prod:
+                # Verificando qual Banco de Dados será gravado
+                Confirmacao = messagebox.askyesno("CONFIRMAÇÃO", "DESEJA CADASTRAR O PRODUTO\n"
+                                                                 f"{Var_Nome_Prod.get()}?", parent=Windows_Cad_Prod)
+                if Confirmacao == True:
 
-                        Cursor_Marca = Conexao.cursor()
+                    Cursor_Prod = Conexao.cursor()
 
-                        Produto = ("INSERT INTO PRODUTOS(IDPRODUTO, NOME, MARCA, PRECO)VALUES(%s, %s, %s, %s);")
+                    Prod = ("INSERT INTO PROD(NAME_PROD, BAR_CODE, GROUP_PROD, VALUE_PROD)VALUES(%s, %s, %s, %s);")
 
-                        Paramentros_Prod = (Var_Cod_Prod.get(), Var_Nome_Prod.get(), VarMarca_Prod.get(), float(VarPreco.get()))
+                    Paramentros_Prod = (Var_Nome_Prod.get(),
+                                        Var_Cod_Barras.get(),
+                                        VarGroup_Prod.get(),
+                                        float(VarPreco_Prod.get()))
 
-                        Cursor_Marca.execute(Produto, Paramentros_Prod)
-                        Conexao.commit()
-                        Conexao.close()
-                        Prox_Prod = messagebox.askyesno("PRÓXIMO", "DESEJA CADASTRAR OUTRO PRODUTO?")
+                    Cursor_Prod.execute(Prod, Paramentros_Prod)
+                    Conexao.commit()
+                    Conexao.close()
+                    Prox_Prod = messagebox.askyesno("PRÓXIMO", "DESEJA CADASTRAR OUTRO PRODUTO",
+                                                    parent=Windows_Cad_Prod)
 
-                        if Prox_Prod == True:
-                            Var_Cod_Prod.set("")
-                            Var_Nome_Prod.set("")
-                            VarPreco.set("")
-                            EntCod_Prod.focus()
-                        else:
-                            pass
-                            # Tela_Produtos.destroy()
-
-                    else:
-                        Var_Cod_Prod.set("")
+                    if Prox_Prod == True:
+                        Next_Prod()
+                        Var_Cod_Prod.set(Maximo_Prod)
                         Var_Nome_Prod.set("")
-                        VarPreco.set("")
-                        EntCod_Prod.focus()
+                        Var_Cod_Barras.set("")
+                        VarGroup_Prod.set("SELECIONE")
+                        VarPreco_Prod.set("0.00")
+                        EntCod_Barras.focus()
+                    else:
+                        Windows_Cad_Prod.destroy()
 
                 else:
-                    messagebox.showinfo("DUPLICADO", "CÓDIGO DO PRODUTO JÁ EXISTENTE!")
-                    Var_Cod_Prod.set("")
                     Var_Nome_Prod.set("")
-                    VarMarca_Prod.set("")
-                    VarPreco.set("")
-                    EntCod_Prod.focus()
-        except:
-            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS")
+                    Var_Cod_Barras.set("")
+                    VarGroup_Prod.set("SELECIONE")
+                    VarPreco_Prod.set("0.00")
+                    EntNome_Prod.focus()
+
+            else:
+                messagebox.showinfo("DUPLICADO", "PRODUTO JÁ EXISTENTE!", parent=Windows_Cad_Prod)
+                Var_Nome_Prod.set("")
+                Var_Cod_Barras.set("")
+                VarGroup_Prod.set("SELECIONE")
+                VarPreco_Prod.set("0.00")
+                EntCod_Barras.focus()
+        #except:
+         #   messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS")
 
     Windows_Cad_Prod = Toplevel()
     Windows_Cad_Prod.geometry("450x270+540+280")
@@ -281,23 +308,13 @@ def Register_Prod(event=None):
 
     # -----------------------------------------------------------------------------------------------------------------
     # Label e Entry do CODIGO
-    Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
-    Cursor_Prod = Conexao.cursor()
-    Cursor_Prod.execute("SELECT MAX(ID_PROD) FROM PROD")
-    Maximo_Prod = ""
-    for e in Cursor_Prod.fetchall():
-        if e[0] == None:
-            Maximo_Prod = "1"
-        else:
-            Maximo_Prod = int(e[0]) + 1
-    Conexao.close()
+    Next_Prod()
     Var_Cod_Prod = StringVar()
-    Var_Cod_Prod.set(str(Maximo_Prod))
+    Var_Cod_Prod.set(Maximo_Prod)
     LblCod_Prod = Label(FrProdutos, text="CODIGO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
     LblCod_Prod.place(x=5, y=5)
     EntCod_Prod = Entry(FrProdutos, font=Fonte12, width=8, textvariable=Var_Cod_Prod, justify=CENTER, state=DISABLED)
     EntCod_Prod.place(x=83, y=5)
-    EntCod_Prod.focus()
     # -----------------------------------------------------------------------------------------------------------------
 
     # Label e Entry do CODIGO de BARRAS
@@ -306,8 +323,10 @@ def Register_Prod(event=None):
     LblCod_Barras = Label(FrProdutos, text="COD BARRAS:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
     LblCod_Barras.place(x=170, y=5)
     EntCod_Barras = Entry(FrProdutos, font=Fonte12, textvariable=Var_Cod_Barras, validate='key', justify=CENTER,
-                        validatecommand=vcmd_Prod, width=14)
+                        validatecommand=vcmd_Prod, width=13)
     EntCod_Barras.place(x=290, y=5)
+    EntCod_Barras.bind("<KeyRelease>", Max_Dig_Code)
+    EntCod_Barras.focus()
     # -----------------------------------------------------------------------------------------------------------------
 
     # Label e Entry do NOME
@@ -329,6 +348,8 @@ def Register_Prod(event=None):
     CMBGroup_Prod.set("SELECIONE")
     CMBGroup_Prod['values'] = CMBGroup()
     CMBGroup_Prod["state"] = 'readonly'
+    CMBGroup_Prod.bind("<Return>", Value_Prod)
+    CMBGroup_Prod.bind("<<ComboboxSelected>>", Value_Prod)
     CMBGroup_Prod.place(x=83, y=85)
     FrProdutos.option_add('*TCombobox*Listbox.font', Fonte11)
     FrProdutos.option_add('*TCombobox*Listbox.selectBackground', Verde)
@@ -337,14 +358,14 @@ def Register_Prod(event=None):
     # -----------------------------------------------------------------------------------------------------------------
 
     # Label e Entry do PREÇO
-    VarPreco = StringVar()
-    VarPreco.set("")
-    LblPreco = Label(FrProdutos, text="PREÇO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
-    LblPreco.place(x=5, y=125)
-    EntPreco = Entry(FrProdutos, font=Fonte12, width=8, textvariable=VarPreco, justify=RIGHT, validate='key',
+    VarPreco_Prod = StringVar()
+    VarPreco_Prod.set("0.00")
+    LblPreco_Prod = Label(FrProdutos, text="PREÇO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblPreco_Prod.place(x=5, y=125)
+    EntPreco_Prod = Entry(FrProdutos, font=Fonte12, width=8, textvariable=VarPreco_Prod, justify=RIGHT, validate='key',
                           validatecommand=vcmd_Prod)
-    EntPreco.place(x=110, y=125)
-    # EntPreco.bind("<Return>", Salvar_Produto)
+    EntPreco_Prod.place(x=110, y=125)
+    EntPreco_Prod.bind("<Return>", Salvar_Produto)
 
     LblPorc = Label(FrProdutos, text="R$", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
     LblPorc.place(x=80, y=125)
@@ -352,8 +373,8 @@ def Register_Prod(event=None):
 
     # BOTÕES.....
     # Botão Salvar
-    btSalvar_Prod = Button(Windows_Cad_Prod, bg=Verde, image=Foto_Salvar_Prod, activebackground=Verde,
-                           borderwidth=0)
+    btSalvar_Prod = Button(Windows_Cad_Prod, bg=Verde, image=Foto_Salvar_Prod, activebackground=Verde)
+    btSalvar_Prod.config(borderwidth=0, command=Salvar_Produto)
     btSalvar_Prod.image = Foto_Salvar_Prod
     btSalvar_Prod.place(x=380, y=12)
 # ------------------------ FIM ----------------------------------------------------------------------------------------
