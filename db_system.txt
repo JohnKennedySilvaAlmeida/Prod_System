@@ -37,7 +37,7 @@ CREATE TABLE bd_system.prod (
  name_prod VARCHAR(50) NOT NULL,
  bar_code VARCHAR(13) NOT NULL,
  group_prod VARCHAR(40),
- value_prod DECIMAL(10.2),
+ value_prod DECIMAL(10,2),
  created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
  PRIMARY KEY (id_prod))

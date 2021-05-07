@@ -382,64 +382,71 @@ def Register_Prod(event=None):
 # ---------------- EXCLUIR PRODUTOS -----------------------------------------------------------------------------------
 def Excluir_Produtos(event=None):
 
-    Lista_Marcas_Prod = []
+    Lista_Group_Prod = []
 
-    def CMBMarcas_Prod():
+    def CMBGroup_Prod():
         try:
-            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="ROMANO")
-            cursor_Prod = Conexao.cursor()
-            cursor_Prod.execute('SELECT NOME FROM MARCAS ORDER BY NOME')
+            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+            Cursor_Produto = Conexao.cursor()
+            Cursor_Produto.execute('SELECT NAME_GROUP FROM GROUP_PROD ORDER BY NAME_GROUP')
 
-            for row in cursor_Prod.fetchall():
-                Lista_Marcas_Prod.append(row[0])
+            for row in Cursor_Produto.fetchall():
+                Lista_Group_Prod.append(row[0])
 
-            return Lista_Marcas_Prod
+            return Lista_Group_Prod
         except:
-            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS")
+            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS", parent=Windows_Exc_Prod)
 
     def Deletar_Produto(event=None):
 
         try:
-            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="ROMANO")
+            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
             Cursor_Exc_Prod = Conexao.cursor()
-            confirma_Exc = messagebox.askyesno("CONFIRMAÇÃO", f"VOCÊ DESEJA EXCLUIR O PRODUTO\n"
-                                                           f"{Var_Cod_Prod_Exc.get()}")
+            confirma_Exc = messagebox.askyesno(
+                "CONFIRMAÇÃO", f"VOCÊ DESEJA EXCLUIR O PRODUTO\n"
+                               f"{Var_Exc_Nome_Prod.get(). upper()}",
+                               parent=Windows_Exc_Prod)
             if confirma_Exc == True:
 
-                Cursor_Exc_Prod.execute("DELETE FROM PRODUTOS WHERE IDPRODUTO = '%s'" % Var_Cod_Prod_Exc.get())
+                Cursor_Exc_Prod.execute("DELETE FROM PROD WHERE ID_PROD = '%s'" % Var_Cod_Prod_Exc.get())
                 Conexao.commit()
                 Conexao.close()
+                messagebox.showinfo("SUCESSO", "PRODUTO EXCLUÍDO COM SUCESSO", parent=Windows_Exc_Prod)
                 Windows_Exc_Prod.destroy()
-                messagebox.showinfo("SUCESSO", "PRODUTO EXCLUÍDO COM SUCESSO")
 
             else:
-                Var_Cod_Prod_Exc.set("SELECIONE")
+                Ent_Cod_Prod_Exc.config(state=NORMAL)
                 Var_Cod_Prod_Exc.set("")
+                Var_Cod_Barras_Exc.set("")
+                Var_Exc_Prod_Group.set("SELECIONE")
+                Var_Preco_Exc.set("0.00")
+                Var_Exc_Nome_Prod.set("")
         except:
-            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS")
+            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS", parent=Windows_Exc_Prod)
 
     def Select_Cod_Prod(event=None):
 
         try:
             if str(Var_Cod_Prod_Exc.get()) == "":
-                messagebox.showinfo("ERROR", "DIGITE UM CÓDIGO DE PRODUTO")
+                messagebox.showinfo("ERROR", "DIGITE UM CÓDIGO DE PRODUTO", parent=Windows_Exc_Prod)
             else:
-                Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="ROMANO")
+                Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
                 Cursor_Cod_Prod = Conexao.cursor()
-                Cursor_Cod_Prod.execute("SELECT COD_BARRAS, NOME, MARCA, PRECO FROM PRODUTOS WHERE IDPRODUTO = '%s'"
+                Cursor_Cod_Prod.execute("SELECT NAME_PROD, BAR_CODE, GROUP_PROD, VALUE_PROD FROM PROD WHERE "
+                                        "ID_PROD = '%s'"
                                         % str(Var_Cod_Prod_Exc.get()))
                 Get_Cod_Prod = Cursor_Cod_Prod.fetchall()
                 if Get_Cod_Prod == ():
-                    messagebox.showinfo("INEXISTENTE", "CÓDIGO INEXISTENTE")
+                    messagebox.showinfo("INEXISTENTE", "CÓDIGO INEXISTENTE", parent=Windows_Exc_Prod)
                 else:
                     for cod in Get_Cod_Prod:
-                        Var_Cod_Barras_Exc.set(cod[0])
-                        Var_Exc_Nome_Prod.set(cod[1])
-                        Var_Exc_Prod_Marca.set(cod[2])
+                        Var_Exc_Nome_Prod.set(cod[0])
+                        Var_Cod_Barras_Exc.set(cod[1])
+                        Var_Exc_Prod_Group.set(cod[2])
                         Var_Preco_Exc.set(cod[3])
-                    Ent_Cod_Prod_Exc.config(state=NORMAL)
+                    Ent_Cod_Prod_Exc.config(state=DISABLED)
         except:
-            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS")
+            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS", parent=Windows_Exc_Prod)
 
     def UP_Button(event=None):
         if Ent_Cod_Prod_Exc['state'] == DISABLED:
@@ -455,8 +462,8 @@ def Excluir_Produtos(event=None):
 
     # Estrutura para a Janela de Excluir Produtos ---------------------------------------------------------------------
     Windows_Exc_Prod = Toplevel()
-    Windows_Exc_Prod.geometry("450x270+340+170")
-    Windows_Exc_Prod.title("EXCLUIR PRODUTOS")
+    Windows_Exc_Prod.geometry("450x270+150+80")
+    Windows_Exc_Prod.title("EXCLUIR PRODUTO")
     Windows_Exc_Prod.minsize(450, 270)
     Windows_Exc_Prod.maxsize(450, 270)
     Windows_Exc_Prod.resizable(False, False)
@@ -464,14 +471,14 @@ def Excluir_Produtos(event=None):
     Windows_Exc_Prod.iconbitmap("Imagens/Logo_SFundo.ico")
     # -----------------------------------------------------------------------------------------------------------------
     # Caminho com Variavel com a foto
-    Foto_Ex_Save_Produtos = PhotoImage(file="Imagens//Save.png")
+    Foto_Ex_Save_Produtos = PhotoImage(file="Imagens//Btn_Excluir.png")
 
     # Label para criar aviso do botão Salvar
     LSalvar = Label(Windows_Exc_Prod, text="Excluir", bg=Verde, fg=Verde, font=Fonte10)
     LSalvar.place(x=382, y=58)
 
     # Frame Principal da Janela
-    Frame_Exc_Produtos = LabelFrame(Windows_Exc_Prod, text="EXCLUIR PRODUTOS")
+    Frame_Exc_Produtos = LabelFrame(Windows_Exc_Prod, text="EXCLUIR PRODUTO")
     Frame_Exc_Produtos.config(font=Fonte11B, bg=Cinza_Romano, fg=Branco)
     Frame_Exc_Produtos.place(x=5, y=80, width=440, height=180)
     # -----------------------------------------------------------------------------------------------------------------
@@ -481,7 +488,7 @@ def Excluir_Produtos(event=None):
     Lbl_Cod_Prod_Exc = Label(Frame_Exc_Produtos, text="CODIGO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
     Lbl_Cod_Prod_Exc.place(x=5, y=5)
     Ent_Cod_Prod_Exc = Entry(Frame_Exc_Produtos, textvariable=Var_Cod_Prod_Exc)
-    Ent_Cod_Prod_Exc.config(font=Fonte12, width=8, validate='key', justify=CENTER)
+    Ent_Cod_Prod_Exc.config(font=Fonte12, width=8, justify=CENTER)
     Ent_Cod_Prod_Exc.place(x=83, y=5)
     Ent_Cod_Prod_Exc.focus()
     Ent_Cod_Prod_Exc.bind("<Return>", Select_Cod_Prod)
@@ -492,7 +499,7 @@ def Excluir_Produtos(event=None):
     Lbl_Cod_Barras_Exc = Label(Frame_Exc_Produtos, text="COD BARRAS:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
     Lbl_Cod_Barras_Exc.place(x=170, y=5)
     Ent_Cod_Barras_Exc = Entry(Frame_Exc_Produtos, textvariable=Var_Cod_Barras_Exc)
-    Ent_Cod_Barras_Exc.config(width=14, validate='key', justify=CENTER, font=Fonte12, state=DISABLED)
+    Ent_Cod_Barras_Exc.config(width=13, justify=CENTER, font=Fonte12, state=DISABLED)
     Ent_Cod_Barras_Exc.place(x=290, y=5)
     # -----------------------------------------------------------------------------------------------------------------
     # Label e Entry do NOME DO PRODUTO
@@ -504,14 +511,14 @@ def Excluir_Produtos(event=None):
     Ent_Nome_Prod.place(x=83, y=45)
     # -----------------------------------------------------------------------------------------------------------------
     # Label e Entry de MARCA DO PRODUTO
-    Var_Exc_Prod_Marca = StringVar()
-    Var_Exc_Prod_Marca.set("")
-    Lbl_Exc_Prod_Marca = Label(Frame_Exc_Produtos, text="MARCA:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
-    Lbl_Exc_Prod_Marca.place(x=5, y=85)
-    CMB_Exc_Prod_Marca = Combobox(Frame_Exc_Produtos, font=Fonte11, width=20, textvariable=Var_Exc_Prod_Marca)
-    CMB_Exc_Prod_Marca.config(state=DISABLED)
-    CMB_Exc_Prod_Marca['values'] = CMBMarcas_Prod()
-    CMB_Exc_Prod_Marca.place(x=83, y=85)
+    Var_Exc_Prod_Group = StringVar()
+    Var_Exc_Prod_Group.set("")
+    Lbl_Exc_Prod_Group = Label(Frame_Exc_Produtos, text="GRUPO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    Lbl_Exc_Prod_Group.place(x=5, y=85)
+    CMB_Exc_Prod_Group = Combobox(Frame_Exc_Produtos, font=Fonte11, width=20, textvariable=Var_Exc_Prod_Group)
+    CMB_Exc_Prod_Group.config(state=DISABLED)
+    CMB_Exc_Prod_Group['values'] = CMBGroup_Prod()
+    CMB_Exc_Prod_Group.place(x=83, y=85)
     Frame_Exc_Produtos.option_add('*TCombobox*Listbox.font', Fonte11)
     Frame_Exc_Produtos.option_add('*TCombobox*Listbox.selectBackground', Verde)
     Frame_Exc_Produtos.option_add('*TCombobox*Listbox.background', Branco)
@@ -531,8 +538,8 @@ def Excluir_Produtos(event=None):
     # -----------------------------------------------------------------------------------------------------------------
     # BOTÕES.....
     # Botão Deletar Produtos
-    BtnExcluir_Prod = Button(Windows_Exc_Prod, bg=Verde, image=Foto_Ex_Save_Produtos, activebackground=Verde,
-                             borderwidth=0)
+    BtnExcluir_Prod = Button(Windows_Exc_Prod, bg=Verde, image=Foto_Ex_Save_Produtos, activebackground=Verde)
+    BtnExcluir_Prod.config(borderwidth=0, command=Deletar_Produto)
     BtnExcluir_Prod.image = Foto_Ex_Save_Produtos
     BtnExcluir_Prod.place(x=380, y=12)
     BtnExcluir_Prod.bind("<Enter>", UP_Button)
