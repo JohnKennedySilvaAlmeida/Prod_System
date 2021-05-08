@@ -156,17 +156,21 @@ def Register_Group(event=None):
 
     Windows_Cad_Group = Toplevel()
     Windows_Cad_Group.geometry("370x200+250+200")
-    Windows_Cad_Group.title("CADASTRO DE GRUPO")
+    Windows_Cad_Group.title("SISTEMA DE GERENCIAMENTO")
     Windows_Cad_Group.minsize(370, 200)
     Windows_Cad_Group.maxsize(370, 200)
     Windows_Cad_Group.resizable(False, False)
-    Windows_Cad_Group["bg"] = Verde
+    Windows_Cad_Group["bg"] = Cinza_Novo
     Windows_Cad_Group.iconbitmap("Imagens/Logo_SFundo.ico")
 
     # Caminho com Variavel com a foto
     Foto_Salvar_Group = PhotoImage(file="Imagens//Save.png")
+    # -----------------------------------------------------------------------------------------------------------------
+    Lbl_Titulo4 = Label(Windows_Cad_Group, text="----" * 6, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+    Lbl_Titulo4.place(x=0, y=10)
+    # -----------------------------------------------------------------------------------------------------------------
 
-    Frame_Group = LabelFrame(Windows_Cad_Group, text="CADASTRO DE GRUPO", bg=Cinza_Romano, fg=Branco, font=Fonte11B)
+    Frame_Group = LabelFrame(Windows_Cad_Group, text="CADASTRO DE GRUPO", bg=Cinza40, fg=Amarelo_Novo, font=Fonte11B)
     Frame_Group.place(x=5, y=70, width=350, height=115)
     # -----------------------------------------------------------------------------------------------------------------
     # Label e Entry do CODIGO do GROUP
@@ -182,14 +186,14 @@ def Register_Group(event=None):
     Var_Cod_Group = StringVar()
     Var_Cod_Group.set(str(Maximo))
     Conexao_Id.close()
-    LblCod_Group = Label(Frame_Group, text="COD:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblCod_Group = Label(Frame_Group, text="COD:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblCod_Group.place(x=5, y=5)
     EntCod_Group = Entry(Frame_Group, font=Fonte12, width=10, textvariable=Var_Cod_Group, justify=CENTER, state=DISABLED)
     EntCod_Group.place(x=80, y=5)
     # -----------------------------------------------------------------------------------------------------------------
     # Label e Entry do NOME do GROUP
     Var_Nome_Group = StringVar()
-    LblNome_Group = Label(Frame_Group, text="NOME:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblNome_Group = Label(Frame_Group, text="NOME:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblNome_Group.place(x=5, y=45)
     EntNome_Group = Entry(Frame_Group, font=Fonte12, width=25, textvariable=Var_Nome_Group)
     EntNome_Group.place(x=80, y=45)
@@ -198,7 +202,7 @@ def Register_Group(event=None):
     EntNome_Group.focus()
     # -----------------------------------------------------------------------------------------------------------------
     # BOTÕES.....
-    btSalvar_Group = Button(Windows_Cad_Group, bg=Verde, image=Foto_Salvar_Group, activebackground=Verde,
+    btSalvar_Group = Button(Windows_Cad_Group, bg=Cinza_Novo, image=Foto_Salvar_Group, activebackground=Cinza_Novo,
                               borderwidth=0, command=Save_Group)
     btSalvar_Group.image = Foto_Salvar_Group
     btSalvar_Group.place(x=304, y=12)
@@ -326,18 +330,22 @@ def Register_Prod(event=None):
 
     Windows_Cad_Prod = Toplevel()
     Windows_Cad_Prod.geometry("450x270+540+280")
-    Windows_Cad_Prod.title("CADASTRO DE PRODUTOS")
+    Windows_Cad_Prod.title("SISTEMA DE GERENCIAMENTO")
     Windows_Cad_Prod.minsize(450, 270)
     Windows_Cad_Prod.maxsize(450, 270)
     Windows_Cad_Prod.resizable(False, False)
-    Windows_Cad_Prod["bg"] = Verde
+    Windows_Cad_Prod["bg"] = Cinza_Novo
     Windows_Cad_Prod.iconbitmap("Imagens/Logo_SFundo.ico")
 
     # Caminho com Variavel com a foto
     Foto_Salvar_Prod = PhotoImage(file="Imagens//Save.png")
     vcmd_Prod = (Windows_Cad_Prod.register(validate), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W')
 
-    FrProdutos = LabelFrame(Windows_Cad_Prod, text="CADASTRO DE PRODUTOS", bg=Cinza_Romano, fg=Branco, font=Fonte11B)
+    # -----------------------------------------------------------------------------------------------------------------
+    Lbl_Titulo3 = Label(Windows_Cad_Prod, text="----" * 6, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+    Lbl_Titulo3.place(x=0, y=10)
+    # -----------------------------------------------------------------------------------------------------------------
+    FrProdutos = LabelFrame(Windows_Cad_Prod, text="CADASTRO DE PRODUTOS", bg=Cinza40, fg=Amarelo_Novo, font=Fonte11B)
     FrProdutos.place(x=5, y=80, width=440, height=180)
 
     # -----------------------------------------------------------------------------------------------------------------
@@ -345,7 +353,7 @@ def Register_Prod(event=None):
     Next_Prod()
     Var_Cod_Prod = StringVar()
     Var_Cod_Prod.set(Maximo_Prod)
-    LblCod_Prod = Label(FrProdutos, text="CODIGO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblCod_Prod = Label(FrProdutos, text="CODIGO:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblCod_Prod.place(x=5, y=5)
     EntCod_Prod = Entry(FrProdutos, font=Fonte12, width=8, textvariable=Var_Cod_Prod, justify=CENTER, state=DISABLED)
     EntCod_Prod.place(x=83, y=5)
@@ -354,7 +362,7 @@ def Register_Prod(event=None):
     # Label e Entry do CODIGO de BARRAS
     Var_Cod_Barras = StringVar()
     Var_Cod_Barras.set("")
-    LblCod_Barras = Label(FrProdutos, text="COD BARRAS:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblCod_Barras = Label(FrProdutos, text="COD BARRAS:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblCod_Barras.place(x=170, y=5)
     EntCod_Barras = Entry(FrProdutos, font=Fonte12, textvariable=Var_Cod_Barras, validate='key', justify=CENTER,
                         validatecommand=vcmd_Prod, width=13)
@@ -366,7 +374,7 @@ def Register_Prod(event=None):
     # Label e Entry do NOME
     Var_Nome_Prod = StringVar()
     Var_Nome_Prod.set("")
-    LblNome_Prod = Label(FrProdutos, text="NOME:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblNome_Prod = Label(FrProdutos, text="NOME:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblNome_Prod.place(x=5, y=45)
     EntNome_Prod = Entry(FrProdutos, font=Fonte12, width=37, textvariable=Var_Nome_Prod)
     EntNome_Prod.place(x=83, y=45)
@@ -376,7 +384,7 @@ def Register_Prod(event=None):
     # Label e Entry de GROUP
     VarGroup_Prod = StringVar()
     VarGroup_Prod.set("")
-    LblGroup_Prod = Label(FrProdutos, text="GRUPO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblGroup_Prod = Label(FrProdutos, text="GRUPO:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblGroup_Prod.place(x=5, y=85)
     CMBGroup_Prod = Combobox(FrProdutos, font=Fonte11, width=20, textvariable=VarGroup_Prod)
     CMBGroup_Prod.set("SELECIONE")
@@ -394,20 +402,20 @@ def Register_Prod(event=None):
     # Label e Entry do PREÇO
     VarPreco_Prod = StringVar()
     VarPreco_Prod.set("0.00")
-    LblPreco_Prod = Label(FrProdutos, text="PREÇO:", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblPreco_Prod = Label(FrProdutos, text="PREÇO:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblPreco_Prod.place(x=5, y=125)
     EntPreco_Prod = Entry(FrProdutos, font=Fonte12, width=8, textvariable=VarPreco_Prod, justify=RIGHT, validate='key',
                           validatecommand=vcmd_Prod)
     EntPreco_Prod.place(x=110, y=125)
     EntPreco_Prod.bind("<Return>", Salvar_Produto)
 
-    LblPorc = Label(FrProdutos, text="R$", font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    LblPorc = Label(FrProdutos, text="R$", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblPorc.place(x=80, y=125)
     # -----------------------------------------------------------------------------------------------------------------
 
     # BOTÕES.....
     # Botão Salvar
-    btSalvar_Prod = Button(Windows_Cad_Prod, bg=Verde, image=Foto_Salvar_Prod, activebackground=Verde)
+    btSalvar_Prod = Button(Windows_Cad_Prod, bg=Cinza_Novo, image=Foto_Salvar_Prod, activebackground=Cinza_Novo)
     btSalvar_Prod.config(borderwidth=0, command=Salvar_Produto)
     btSalvar_Prod.image = Foto_Salvar_Prod
     btSalvar_Prod.place(x=380, y=12)
@@ -490,30 +498,34 @@ def Excluir_Produtos(event=None):
 
     def Down_Button(event=None):
         if Ent_Cod_Prod_Exc['state'] == DISABLED:
-            LSalvar.config(fg=Verde)
+            LSalvar.config(fg=Cinza_Novo)
         else:
             pass
 
     # Estrutura para a Janela de Excluir Produtos ---------------------------------------------------------------------
     Windows_Exc_Prod = Toplevel()
-    Windows_Exc_Prod.geometry("450x270+150+80")
-    Windows_Exc_Prod.title("EXCLUIR PRODUTO")
+    Windows_Exc_Prod.geometry("450x270+500+250")
+    Windows_Exc_Prod.title("SISTEMA DE GERENCIAMENTO")
     Windows_Exc_Prod.minsize(450, 270)
     Windows_Exc_Prod.maxsize(450, 270)
     Windows_Exc_Prod.resizable(False, False)
-    Windows_Exc_Prod["bg"] = Verde
+    Windows_Exc_Prod["bg"] = Cinza_Novo
     Windows_Exc_Prod.iconbitmap("Imagens/Logo_SFundo.ico")
     # -----------------------------------------------------------------------------------------------------------------
     # Caminho com Variavel com a foto
     Foto_Ex_Save_Produtos = PhotoImage(file="Imagens//Btn_Excluir.png")
 
     # Label para criar aviso do botão Salvar
-    LSalvar = Label(Windows_Exc_Prod, text="Excluir", bg=Verde, fg=Verde, font=Fonte10)
+    LSalvar = Label(Windows_Exc_Prod, text="Excluir", bg=Cinza_Novo, fg=Cinza_Novo, font=Fonte10)
     LSalvar.place(x=382, y=58)
+    # -----------------------------------------------------------------------------------------------------------------
+    Lbl_Titulo5 = Label(Windows_Exc_Prod, text="----" * 6, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+    Lbl_Titulo5.place(x=0, y=10)
+    # -----------------------------------------------------------------------------------------------------------------
 
     # Frame Principal da Janela
     Frame_Exc_Produtos = LabelFrame(Windows_Exc_Prod, text="EXCLUIR PRODUTO")
-    Frame_Exc_Produtos.config(font=Fonte11B, bg=Cinza_Romano, fg=Branco)
+    Frame_Exc_Produtos.config(font=Fonte11B, bg=Cinza_Romano, fg=Amarelo_Novo)
     Frame_Exc_Produtos.place(x=5, y=80, width=440, height=180)
     # -----------------------------------------------------------------------------------------------------------------
     # Label e Entry do CODIGO do PRODUTO
@@ -572,7 +584,7 @@ def Excluir_Produtos(event=None):
     # -----------------------------------------------------------------------------------------------------------------
     # BOTÕES.....
     # Botão Deletar Produtos
-    BtnExcluir_Prod = Button(Windows_Exc_Prod, bg=Verde, image=Foto_Ex_Save_Produtos, activebackground=Verde)
+    BtnExcluir_Prod = Button(Windows_Exc_Prod, bg=Cinza_Novo, image=Foto_Ex_Save_Produtos, activebackground=Cinza_Novo)
     BtnExcluir_Prod.config(borderwidth=0, command=Deletar_Produto)
     BtnExcluir_Prod.image = Foto_Ex_Save_Produtos
     BtnExcluir_Prod.place(x=380, y=12)
@@ -637,7 +649,7 @@ def Register_Users(event=None):
         Lbl_txt_Salvar.config(fg=Branco)
 
     def Dawn_Salvar(event=None):
-        Lbl_txt_Salvar.config(fg=Verde)
+        Lbl_txt_Salvar.config(fg=Cinza_Novo)
 
     # Função criada para Mostra Senha quando CheckButton acionado
     def Show_Senha(event=None):
@@ -702,6 +714,7 @@ def Register_Users(event=None):
                 Var_Tel.get() == "" or EntEmail_User.get() == "" or EntLogin_User.get() == "" or \
                  Var_Senha_User.get() == "" or Var_Senha_2_User.get() == "":
             messagebox.showinfo('ERROR', 'HÁ CAMPO(S) SEM DADOS!', parent=Windows_User)
+            btSalvar_User.config(state=NORMAL)
             EntNome_User.focus()
         else:
             CPF = Var_Cpf_User.get()
@@ -763,12 +776,12 @@ def Register_Users(event=None):
 
     # Estrutura para a Janela de Excluir Produtos ---------------------------------------------------------------------
     Windows_User = Toplevel()
-    Windows_User.geometry("600x435+300+160")
-    Windows_User.title("CADASTRO DE USUÁRIO")
-    Windows_User.minsize(600, 435)
-    Windows_User.maxsize(600, 435)
+    Windows_User.geometry("600x475+400+160")
+    Windows_User.title("SISTEMA DE GERENCIAMENTO")
+    Windows_User.minsize(600, 475)
+    Windows_User.maxsize(600, 475)
     Windows_User.resizable(False, False)
-    Windows_User["bg"] = Verde
+    Windows_User["bg"] = Cinza_Novo
     Windows_User.iconbitmap("Imagens/Logo_SFundo.ico")
     # -----------------------------------------------------------------------------------------------------------------
 
@@ -782,23 +795,29 @@ def Register_Users(event=None):
     Windows_User.option_add('*TCombobox*Listbox.background', Branco)
     Windows_User.option_add('*TCombobox*Listbox.selectForeground', Branco)
     # -----------------------------------------------------------------------------------------------------------------
-
+    # -----------------------------------------------------------------------------------------------------------------
+    Lbl_Titulo5 = Label(Windows_User, text="----" * 10, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+    Lbl_Titulo5.place(x=0, y=10)
+    # -----------------------------------------------------------------------------------------------------------------
     # Frame Secundários -----------------------------------------------------------------------------------------------
-    Tela_Pessoal = LabelFrame(Windows_User, text="DADOS PESSOAIS", font=Fonte10B, bg=Verde, fg=Gold)
-    Tela_Pessoal.place(x=90, y=75, width=500, height=235)
-    Tela_Password = LabelFrame(Windows_User, text="LOGIN", font=Fonte10B, bg=Verde, fg=Gold)
-    Tela_Password.place(x=90, y=310, width=500, height=115)
+    Tela_Principal = LabelFrame(Windows_User, text="CADASTRO DE USUÁRIO", font=Fonte10B, bg=Cinza40, fg=Amarelo_Novo)
+    Tela_Principal.place(x=90, y=85, width=500, height=380)
+    # Frame Secundários -----------------------------------------------------------------------------------------------
+    Tela_Pessoal = LabelFrame(Tela_Principal, text="DADOS PESSOAIS", font=Fonte8B, bg=Cinza40, fg=Amarelo_Novo)
+    Tela_Pessoal.place(x=0, y=0, width=490, height=235)
+    Tela_Password = LabelFrame(Tela_Principal, text="LOGIN", font=Fonte8B, bg=Cinza40, fg=Amarelo_Novo)
+    Tela_Password.place(x=0, y=237, width=490, height=115)
     # -----------------------------------------------------------------------------------------------------------------
 
     # Label para criar aviso do botão Salvar
-    Lbl_txt_Salvar = Label(Windows_User, text="Salvar", bg=Verde, fg=Verde, font=Fonte10)
+    Lbl_txt_Salvar = Label(Windows_User, text="Salvar", bg=Cinza_Novo, fg=Cinza_Novo, font=Fonte10)
     Lbl_txt_Salvar.place(x=535, y=58)
     # -----------------------------------------------------------------------------------------------------------------
 
     # Imagem do Usuario
-    Label_Imagem_User = Label(Windows_User, image=Foto_User, border=0, bg=Verde)
+    Label_Imagem_User = Label(Windows_User, image=Foto_User, border=0, bg=Cinza_Novo)
     Label_Imagem_User.image = Foto_User
-    Label_Imagem_User.place(x=5, y=10)
+    Label_Imagem_User.place(x=5, y=30)
     # -----------------------------------------------------------------------------------------------------------------
 
     # Label e Entry do CÓDIGO do Usuário
@@ -813,7 +832,7 @@ def Register_Users(event=None):
             Maximo_User = int(i[0]) + 1
     Var_Cod_User = StringVar()
     Var_Cod_User.set(Maximo_User)
-    LblCod_User = Label(Tela_Pessoal, text="COD:", font=Fonte11B, bg=Verde, fg=Branco)
+    LblCod_User = Label(Tela_Pessoal, text="COD:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblCod_User.place(x=10, y=5)
     EntCod_User = Entry(Tela_Pessoal, font=Fonte12, width=8, textvariable=Var_Cod_User, state=DISABLED, justify=CENTER)
     EntCod_User.place(x=80, y=5)
@@ -823,7 +842,7 @@ def Register_Users(event=None):
     # Label e Entry do NOME do Usuário
     Var_Nome_User = StringVar()
     Var_Nome_User.set("")
-    LblNome_User = Label(Tela_Pessoal, text="NOME:", font=Fonte11B, bg=Verde, fg=Branco)
+    LblNome_User = Label(Tela_Pessoal, text="NOME:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblNome_User.place(x=10, y=40)
     EntNome_User = Entry(Tela_Pessoal, font=Fonte12, width=35, textvariable=Var_Nome_User)
     EntNome_User.place(x=80, y=40)
@@ -833,7 +852,7 @@ def Register_Users(event=None):
 
     # Label e Entry do CPF do Usuário
     Var_Cpf_User = StringVar()
-    LblCpf_User = Label(Tela_Pessoal, text="CPF:", font=Fonte11B, bg=Verde, fg=Branco)
+    LblCpf_User = Label(Tela_Pessoal, text="CPF:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblCpf_User.place(x=10, y=75)
     EntCpf_User = Entry(Tela_Pessoal, font=Fonte12, width=18, textvariable=Var_Cpf_User, justify=CENTER)
     EntCpf_User.bind("<KeyRelease>", format_cpf)
@@ -844,7 +863,7 @@ def Register_Users(event=None):
     # Dia ---------------------------------------
     Dia_Nasc_User = StringVar()
     Dia_Nasc_User.set("")
-    LblDT_Nasc_User = Label(Tela_Pessoal, text='DATA NASC:', font=Fonte12B, bg=Verde, fg=Branco)
+    LblDT_Nasc_User = Label(Tela_Pessoal, text='DATA NASC:', font=Fonte12B, bg=Cinza40, fg=Branco)
     LblDT_Nasc_User.place(x=10, y=110)
     CMBDia_Nasc_User = Combobox(Tela_Pessoal, font=Fonte12, textvariable=Dia_Nasc_User)
     CMBDia_Nasc_User['values'] = ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10',
@@ -866,7 +885,7 @@ def Register_Users(event=None):
     # Ano ---------------------------------------
     Ano_Nasc_User = StringVar()
     Ano_Nasc_User.set("")
-    CMBAno_Nasc_User = Combobox(Tela_Pessoal, font=Fonte12, background=Verde, textvariable=Ano_Nasc_User)
+    CMBAno_Nasc_User = Combobox(Tela_Pessoal, font=Fonte12, background=Cinza40, textvariable=Ano_Nasc_User)
     CMBAno_Nasc_User['values'] = List_Ano_Nasc
     CMBAno_Nasc_User.set("ANO")
     CMBAno_Nasc_User['state'] = 'readonly'
@@ -874,11 +893,11 @@ def Register_Users(event=None):
 
     # Calculando Idade ------------------------------------------------------------------------------------------------
     idade_User = StringVar()
-    LblAnos_User = Label(Tela_Pessoal, text='IDADE: ', font=Fonte12B, bg=Verde, fg=Branco)
+    LblAnos_User = Label(Tela_Pessoal, text='IDADE: ', font=Fonte12B, bg=Cinza40, fg=Branco)
     LblAnos_User.place(x=320, y=110)
-    LblAnos2_User = Label(Tela_Pessoal, textvariable=idade_User, font=Fonte12B, bg=Verde, fg=Gold)
+    LblAnos2_User = Label(Tela_Pessoal, textvariable=idade_User, font=Fonte12B, bg=Cinza40, fg=Preto)
     LblAnos2_User.place(x=400, y=110)
-    LblAnos3_User = Label(Tela_Pessoal, text='Anos.', font=Fonte12B, bg=Verde, fg=Branco)
+    LblAnos3_User = Label(Tela_Pessoal, text='Anos.', font=Fonte12B, bg=Cinza40, fg=Branco)
     LblAnos3_User.place(x=430, y=110)
     CMBMes_Nasc_User.bind('<<ComboboxSelected>>', Calcula_Idade)
     CMBDia_Nasc_User.bind('<<ComboboxSelected>>', Calcula_Idade)
@@ -889,7 +908,7 @@ def Register_Users(event=None):
     # Label e Entry Email do Usuário
     Var_Email_User = StringVar()
     Var_Email_User.set("")
-    LblEmail_User = Label(Tela_Pessoal, text="EMAIL:", font=Fonte12B, bg=Verde, fg=Branco)
+    LblEmail_User = Label(Tela_Pessoal, text="EMAIL:", font=Fonte12B, bg=Cinza40, fg=Branco)
     LblEmail_User.place(x=10, y=145)
     EntEmail_User = Entry(Tela_Pessoal, width=33, font=Fonte12, textvariable=Var_Email_User)
     EntEmail_User.place(x=80, y=145)
@@ -899,7 +918,7 @@ def Register_Users(event=None):
     # ------------------
     Var_Cod_Tel = StringVar()
     Var_Tel = StringVar()
-    LTelCel = Label(Tela_Pessoal, text='TEL:', font=Fonte11B, bg=Verde, fg=Branco)
+    LTelCel = Label(Tela_Pessoal, text='TEL:', font=Fonte11B, bg=Cinza40, fg=Branco)
     LTelCel.place(x=10, y=180)
     ETelCelCodA = Entry(Tela_Pessoal, width=5, font=Fonte11, validatecommand=Vcmd, validate='key', justify=CENTER,
                         textvariable=Var_Cod_Tel)
@@ -909,14 +928,14 @@ def Register_Users(event=None):
     ETelCel = Entry(Tela_Pessoal, font=Fonte11, validatecommand=Vcmd, validate='key', textvariable=Var_Tel)
     ETelCel.place(x=130, y=180, width=100)
 
-    Lbl_3 = Label(Tela_Pessoal, text="-", font=Fonte11B, bg=Verde, fg=Branco).place(x=115, y=180)
-    Lbl_4 = Label(Tela_Pessoal, text="-", font=Fonte11B, bg=Verde, fg=Branco).place(x=115, y=180)
+    Lbl_3 = Label(Tela_Pessoal, text="-", font=Fonte11B, bg=Cinza40, fg=Branco).place(x=115, y=180)
+    Lbl_4 = Label(Tela_Pessoal, text="-", font=Fonte11B, bg=Cinza40, fg=Branco).place(x=115, y=180)
     # -----------------------------------------------------------------------------------------------------------------
 
     # Label e Entry Login do Usuário
     Var_Login_User = StringVar()
     Var_Login_User.set("")
-    lblLogin_User = Label(Tela_Password, text='LOGIN:*', font=Fonte12B, bg=Verde, fg=Branco)
+    lblLogin_User = Label(Tela_Password, text='LOGIN:*', font=Fonte12B, bg=Cinza40, fg=Branco)
     lblLogin_User.place(x=5, y=5)
     Valided = Tela_Password.register(func=limitar_Size_Login)
     EntLogin_User = Entry(Tela_Password, validate='key', validatecommand=(Valided, '%P'), font=Fonte11, width=15)
@@ -927,7 +946,7 @@ def Register_Users(event=None):
     # Label e Entry 1° Senha do Usuário
     Var_Senha_User = StringVar()
     Var_Senha_User.set("")
-    lbSenha_User = Label(Tela_Password, text='SENHA:*', font=Fonte12B, bg=Verde, fg=Branco)
+    lbSenha_User = Label(Tela_Password, text='SENHA:*', font=Fonte12B, bg=Cinza40, fg=Branco)
     lbSenha_User.place(x=5, y=35)
     Valided_Senha1 = Tela_Password.register(func=limitar_Size_Senha)
     EntSenha_User = Entry(Tela_Password, validate='key', validatecommand=(Valided_Senha1, '%P'))
@@ -938,7 +957,7 @@ def Register_Users(event=None):
     # Label e Entry 2° Senha do Usuário
     Var_Senha_2_User = StringVar()
     Var_Senha_2_User.set("")
-    lbSenha2_User = Label(Tela_Password, text='CONFIRMAR SENHA:*', font=Fonte12B, bg=Verde, fg=Branco)
+    lbSenha2_User = Label(Tela_Password, text='CONFIRMAR SENHA:*', font=Fonte12B, bg=Cinza40, fg=Branco)
     lbSenha2_User.place(x=200, y=35)
     Valided_Senha2 = Tela_Password.register(func=limitar_Size_Senha)
     EntSenha2_User = Entry(Tela_Password, validate='key', validatecommand=(Valided_Senha2, '%P'))
@@ -950,22 +969,23 @@ def Register_Users(event=None):
     # CheckButton pra mostrar a senha ou não
     Var_Show_Senha = StringVar()
     Var_Show_Senha.set("0")
-    Chkbt_Show_Senha = Checkbutton(Tela_Password, text="MOSTRAR SENHA", bg=Verde, fg=Branco, font=Fonte8, onvalue=1)
-    Chkbt_Show_Senha.config(activebackground=Verde, activeforeground=Branco, variable=Var_Show_Senha, selectcolor=Verde)
+    Chkbt_Show_Senha = Checkbutton(Tela_Password, text="MOSTRAR SENHA", bg=Cinza40, fg=Branco, font=Fonte8, onvalue=1)
+    Chkbt_Show_Senha.config(activebackground=Cinza40, activeforeground=Branco, variable=Var_Show_Senha,
+                            selectcolor=Cinza40)
     Chkbt_Show_Senha.place(x=5, y=65)
     Chkbt_Show_Senha.bind("<Button>", Show_Senha)
     # -----------------------------------------------------------------------------------------------------------------
 
     # Label e Avisos de Login e Senha
-    lbRecado_User = Label(Tela_Password, text='Login com Máximo 8 Caracteres', font=Fonte8, bg=Verde, fg=Branco)
+    lbRecado_User = Label(Tela_Password, text='Login com Máximo 8 Caracteres', font=Fonte8, bg=Cinza40, fg=Branco)
     lbRecado_User.place(x=280, y=5)
-    lbRecado2_User = Label(Tela_Password, text='Senha com Máximo 6 Caracteres', font=Fonte8, bg=Verde, fg=Branco)
+    lbRecado2_User = Label(Tela_Password, text='Senha com Máximo 6 Caracteres', font=Fonte8, bg=Cinza40, fg=Branco)
     lbRecado2_User.place(x=280, y=65)
     # -----------------------------------------------------------------------------------------------------------------
 
     # BOTÕES.....
     # Botão SALVAR
-    btSalvar_User = Button(Windows_User, bg=Verde, image=Foto_Salvar, activebackground=Verde, borderwidth=0)
+    btSalvar_User = Button(Windows_User, bg=Cinza_Novo, image=Foto_Salvar, activebackground=Cinza_Novo, borderwidth=0)
     btSalvar_User.config(command=Salvar_User)
     btSalvar_User.image = Foto_Salvar
     btSalvar_User.place(x=532, y=12)
@@ -1074,7 +1094,7 @@ ClientesMenu.add_command(label='EDITAR', font=Fonte12B)
 # ---------------------------------------------------------------------------------------------------------------------
 # Criando Usuario Menu com funções NOVO e EXCLUIR
 UsuarioMenu = Menu(Arquivo, background=Cinza_Novo, fg=Branco, tearoff=False, activebackground=Cinza40)
-UsuarioMenu.add_command(label='NOVO', font=Fonte12B)
+UsuarioMenu.add_command(label='NOVO', font=Fonte12B, command=Register_Users)
 UsuarioMenu.add_command(label='EXCLUIR', font=Fonte12B)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
@@ -1086,8 +1106,8 @@ GrupoMenu.add_command(label='EXCLUIR', font=Fonte12B)
 # ---------------------------------------------------------------------------------------------------------------------
 # Criando Produtos Menu com funções NOVO e EXCLUIR
 ProdutosMenu = Menu(Arquivo, background=Cinza_Novo, fg=Branco, tearoff=False, activebackground=Cinza40)
-ProdutosMenu.add_command(label='NOVO', font=Fonte12B)
-ProdutosMenu.add_command(label='EXCLUIR', font=Fonte12B)
+ProdutosMenu.add_command(label='NOVO', font=Fonte12B, command=Register_Prod)
+ProdutosMenu.add_command(label='EXCLUIR', font=Fonte12B, command=Excluir_Produtos)
 # ---------------------------------------------------------------------------------------------------------------------
 # Criando Consultas Menu com funções ESTOQUE, VENDAS, PRODUTO
 Consultas.menu.add_command(label='ESTOQUE', font=Fonte12B, background=Cinza_Novo, activebackground=Cinza40)
