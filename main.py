@@ -2,7 +2,7 @@ from tkinter.ttk import *
 from tkinter import *
 from tkinter import messagebox
 import pymysql
-#from tkcalendar import DateEntry
+from tkcalendar import DateEntry
 import datetime
 from tkinter.filedialog import askopenfile
 import re
@@ -98,7 +98,7 @@ def Sair_Tela_Inicial(event=None):
     Windows.destroy()
 # ------------------------ FIM ----------------------------------------------------------------------------------------
 
-# Função para CADASTRO DE MARCAS --------------------------------------------------------------------------------------
+# Função para CADASTRO DE GRUPO --------------------------------------------------------------------------------------
 def Register_Group(event=None):
 
     def Title(event=None):
@@ -206,6 +206,113 @@ def Register_Group(event=None):
                               borderwidth=0, command=Save_Group)
     btSalvar_Group.image = Foto_Salvar_Group
     btSalvar_Group.place(x=304, y=12)
+# ------------------------ FIM ----------------------------------------------------------------------------------------
+
+# Função para EXCLUIR GRUPO --------------------------------------------------------------------------------------
+def Delete_Group(event=None):
+
+    Lista_Grupo_2 = []
+
+    def Caixa_Grupo():
+        try:
+            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+            cursor_Group = Conexao.cursor()
+            cursor_Group.execute('SELECT NAME_GROUP FROM GROUP_PROD ORDER BY ID_GROUP')
+
+            for row in cursor_Group.fetchall():
+                Lista_Grupo_2.append(row[0])
+
+            Conexao.close()
+            return Lista_Grupo_2
+        except:
+            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS", parent=Windows_Del_Group)
+
+    def Group_Select(event=None):
+        try:
+            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+            Cursor_Id_Group = Conexao.cursor()
+            Cursor_Id_Group.execute("SELECT ID_GROUP FROM GROUP_PROD WHERE NAME_GROUP = '%s'" % Var_Name_Group.get())
+
+            for id in Cursor_Id_Group.fetchall():
+                Var_Id_Group.set(id[0])
+            Conexao.close()
+
+        except:
+            messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS", parent=Windows_Del_Group)
+
+    def Del_Group(event=None):
+
+        try:
+            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+            # Verificando se há campos em Branco
+            if Var_Name_Group.get() == "SELECIONE":
+                messagebox.showinfo("ERROR", "POR FAVOR SELECIONE UM GRUPO A SER DELETADO", parent=Windows_Del_Group)
+
+            else:
+                Cursor_Del = Conexao.cursor()
+                # Verificando qual Banco de Dados será gravado
+                Confirmacao = messagebox.askyesno("CONFIRMAÇÃO",
+                                                  "DESEJA EXCLUIR O GRUPO\n"
+                                                  f"{Var_Name_Group.get()}", parent=Windows_Del_Group)
+                if Confirmacao == True:
+
+                    Cursor_Del.execute("DELETE FROM GROUP_PROD WHERE ID_GROUP = '%s'" % Var_Id_Group.get())
+                    Conexao.commit()
+                    Conexao.close()
+                    messagebox.showinfo("SUCESSO", f"O GRUPO {Var_Name_Group.get()}\nFOI DELETADO COM SUCESSO!",
+                                        parent=Windows_Del_Group)
+                    Windows_Del_Group.destroy()
+                else:
+                    pass
+        except:
+            messagebox.showinfo("ERROR", "ALGO DEU ERRADO, TENTE NOVAMENTE", parent=Windows_Del_Group)
+
+
+    Windows_Del_Group = Toplevel()
+    Windows_Del_Group.geometry("370x200+250+200")
+    Windows_Del_Group.title("SISTEMA DE GERENCIAMENTO")
+    Windows_Del_Group.minsize(370, 200)
+    Windows_Del_Group.maxsize(370, 200)
+    Windows_Del_Group.resizable(False, False)
+    Windows_Del_Group["bg"] = Cinza_Novo
+    Windows_Del_Group.iconbitmap("Imagens/Logo_SFundo.ico")
+
+    # Caminho com Variavel com a foto
+    Foto_Conf_Del_Group = PhotoImage(file="Imagens//Btn_Excluir.png")
+    Windows_Del_Group.option_add('*TCombobox*Listbox.font', Fonte11)
+    Windows_Del_Group.option_add('*TCombobox*Listbox.selectBackground', Verde)
+    Windows_Del_Group.option_add('*TCombobox*Listbox.background', Branco)
+    Windows_Del_Group.option_add('*TCombobox*Listbox.selectForeground', Branco)
+    # -----------------------------------------------------------------------------------------------------------------
+    Lbl_Titulo7 = Label(Windows_Del_Group, text="----" * 6, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+    Lbl_Titulo7.place(x=0, y=10)
+    # -----------------------------------------------------------------------------------------------------------------
+
+    Frame_Group = LabelFrame(Windows_Del_Group, text="EXCLUIR GRUPO", bg=Cinza40, fg=Amarelo_Novo, font=Fonte11B)
+    Frame_Group.place(x=5, y=70, width=350, height=115)
+    # -----------------------------------------------------------------------------------------------------------------
+    Var_Id_Group = StringVar()
+    LblCod_Group = Label(Frame_Group, text="COD:", font=Fonte11B, bg=Cinza40, fg=Branco)
+    LblCod_Group.place(x=5, y=5)
+    EntCod_Group = Entry(Frame_Group, font=Fonte12, width=10, textvariable=Var_Id_Group, justify=CENTER, state=DISABLED)
+    EntCod_Group.place(x=80, y=5)
+    # -----------------------------------------------------------------------------------------------------------------
+    # Label e Entry do NOME do GROUP
+    Var_Name_Group = StringVar()
+    LblNome_Group = Label(Frame_Group, text="NOME:", font=Fonte11B, bg=Cinza40, fg=Branco)
+    LblNome_Group.place(x=5, y=45)
+    CMB_Del_Group = Combobox(Frame_Group, width=25, textvariable=Var_Name_Group)
+    CMB_Del_Group['values'] = Caixa_Grupo()
+    CMB_Del_Group["state"] = 'readonly'
+    CMB_Del_Group.bind("<Return>", Group_Select)
+    CMB_Del_Group.bind("<<ComboboxSelected>>", Group_Select)
+    CMB_Del_Group.place(x=80, y=45)
+    # -----------------------------------------------------------------------------------------------------------------
+    # BOTÕES.....
+    btConf_Del_Group = Button(Windows_Del_Group, bg=Cinza_Novo, image=Foto_Conf_Del_Group, activebackground=Cinza_Novo,
+                              borderwidth=0, command=Del_Group)
+    btConf_Del_Group.image = Foto_Conf_Del_Group
+    btConf_Del_Group.place(x=304, y=12)
 # ------------------------ FIM ----------------------------------------------------------------------------------------
 
 # ---- Função para CADASTRO DE PRODUTOS -------------------------------------------------------------------------------
@@ -993,6 +1100,75 @@ def Register_Users(event=None):
     btSalvar_User.bind("<Leave>", Dawn_Salvar)
 # ------------------------ FIM ----------------------------------------------------------------------------------------
 
+# ---------------- CONSULTAS ESTOQUE ----------------------------------------------------------------------------------
+def Consulta_Prod(event=None):
+
+
+    # Estrutura para a Janela de Excluir Produtos ---------------------------------------------------------------------
+    Windows_Cons_Prod = Toplevel()
+    Windows_Cons_Prod.geometry("595x480+450+150")
+    Windows_Cons_Prod.title("SISTEMA DE GERENCIAMENTO")
+    Windows_Cons_Prod.minsize(595, 480)
+    Windows_Cons_Prod.maxsize(595, 480)
+    Windows_Cons_Prod.resizable(False, False)
+    Windows_Cons_Prod["bg"] = Cinza_Novo
+    Windows_Cons_Prod.iconbitmap("Imagens/Logo_SFundo.ico")
+
+    # Caminho com Variavel com a foto
+    Img_Listar_Consulta = PhotoImage(file="Imagens//Listar.png")
+    Windows_Cons_Prod.option_add('*TCombobox*Listbox.font', Fonte10)
+    Windows_Cons_Prod.option_add('*TCombobox*Listbox.selectBackground', Verde)
+    Windows_Cons_Prod.option_add('*TCombobox*Listbox.background', Branco)
+    Windows_Cons_Prod.option_add('*TCombobox*Listbox.selectForeground', Branco)
+
+    FrGroup = LabelFrame(Windows_Cons_Prod, bg=Cinza40, fg=Branco, font=Fonte11B)
+    FrGroup.place(x=5, y=60, width=350, height=40)
+    FrResultados = LabelFrame(Windows_Cons_Prod, bg=Cinza40, fg=Branco, font=Fonte11B)
+    FrResultados.place(x=5, y=105, width=585, height=360)
+
+    # -----------------------------------------------------------------------------------------------------------------
+    Lbl_Titulo8 = Label(Windows_Cons_Prod, text="----" * 10, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+    Lbl_Titulo8.place(x=0, y=10)
+    # -----------------------------------------------------------------------------------------------------------------
+
+    # Label e Combobox de Cidades
+    Var_Name_Group = StringVar()
+    Lbl_Name_Group = Label(FrGroup, text="GRUPO:", font=Fonte11B, bg=Cinza40, fg=Branco)
+    Lbl_Name_Group.place(x=5, y=6)
+    CMB_NAme_GRoup = Combobox(FrGroup, font=Fonte11, width=25, textvariable=Var_Name_Group)
+    CMB_NAme_GRoup.set("SELECIONE")
+    #CMB_City['values'] = CMBCidade()
+    CMB_NAme_GRoup["state"] = 'readonly'
+    CMB_NAme_GRoup.place(x=100, y=7)
+    #CMB_NAme_GRoup.bind("<<ComboboxSelected>>", Selct_City)
+
+    # -----------------------------------------------------------------------------------------------------------------
+    # Criando o treeview
+    # Criando o treeview
+    Relacao = Treeview(FrResultados, height=16, columns=('1', '2', '3'))
+    Relacao.heading('#0', text='COD', anchor=CENTER)
+    Relacao.heading('1', text='NOME', anchor=CENTER)
+    Relacao.heading('2', text='PREÇO', anchor=CENTER)
+    Relacao.heading('3', text='DATA CADASTRO', anchor=CENTER)
+
+    Relacao.column('3', width=120, minwidth=120, anchor=W, stretch=NO)
+    Relacao.column('2', width=120, minwidth=120, anchor=W, stretch=NO)
+    Relacao.column('1', width=240, minwidth=240, anchor=CENTER, stretch=NO)
+    Relacao.column('#0', width=70, minwidth=70, anchor=CENTER, stretch=NO)
+    Relacao.place(x=5, y=5)
+    Relacao.tag_configure('Metas', background=Branco, font=Fonte12, foreground=Preto)
+    barra = Scrollbar(FrResultados, orient='vertical', command=Relacao.yview)
+    barra.place(x=558, y=5, height=346)
+    Relacao.configure(yscrollcommand=barra.set)
+    # -----------------------------------------------------------------------------------------------------------------
+    # BOTÕES.....
+    # Botão Salvar Cidade
+    btSalvar_Consulta = Button(Windows_Cons_Prod, bg=Cinza_Novo, image=Img_Listar_Consulta, borderwidth=0)
+    btSalvar_Consulta.config(activebackground=Cinza_Novo)
+    btSalvar_Consulta.image = Img_Listar_Consulta
+    btSalvar_Consulta.place(x=520, y=12)
+    # -----------------------------------------------------------------------------------------------------------------
+# ------------------------ FIM ----------------------------------------------------------------------------------------
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # ---------------------------------------------------------------------------------------------------------------------
@@ -1101,7 +1277,7 @@ UsuarioMenu.add_command(label='EXCLUIR', font=Fonte12B)
 # Criando Grupo Menu com funções NOVO e EXCLUIR
 GrupoMenu = Menu(Arquivo, background=Cinza_Novo, fg=Branco, tearoff=False, activebackground=Cinza40)
 GrupoMenu.add_command(label='NOVO', font=Fonte12B, command=Register_Group)
-GrupoMenu.add_command(label='EXCLUIR', font=Fonte12B)
+GrupoMenu.add_command(label='EXCLUIR', font=Fonte12B, command=Delete_Group)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 # Criando Produtos Menu com funções NOVO e EXCLUIR
@@ -1112,7 +1288,8 @@ ProdutosMenu.add_command(label='EXCLUIR', font=Fonte12B, command=Excluir_Produto
 # Criando Consultas Menu com funções ESTOQUE, VENDAS, PRODUTO
 Consultas.menu.add_command(label='ESTOQUE', font=Fonte12B, background=Cinza_Novo, activebackground=Cinza40)
 Consultas.menu.add_command(label='VENDAS', font=Fonte12B, background=Cinza_Novo, activebackground=Cinza40)
-Consultas.menu.add_command(label='PRODUTO', font=Fonte12B, background=Cinza_Novo, activebackground=Cinza40)
+Consultas.menu.add_command(label='PRODUTO', font=Fonte12B, background=Cinza_Novo, activebackground=Cinza40,
+                           command=Consulta_Prod)
 # ---------------------------------------------------------------------------------------------------------------------
 # Criando Relatorios Menu com função VENDAS
 Relatorios.menu.add_command(label='VENDAS', font=Fonte12B, background=Cinza_Novo, activebackground=Cinza40)
