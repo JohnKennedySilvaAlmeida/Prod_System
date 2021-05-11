@@ -115,11 +115,13 @@ EntCod_Group.place(x=80, y=5)
 # -----------------------------------------------------------------------------------------------------------------
 # Label e Entry do NOME do GROUP
 Var_Name_Group = StringVar()
+Var_Name_Group.set("SELECIONE")
 LblNome_Group = Label(Frame_Group, text="NOME:", font=Fonte11B, bg=Cinza40, fg=Branco)
 LblNome_Group.place(x=5, y=45)
-CMB_Del_Group = Combobox(Frame_Group, width=25, textvariable=Var_Name_Group)
+CMB_Del_Group = Combobox(Frame_Group, width=25, textvariable=Var_Name_Group, font=Fonte12)
 CMB_Del_Group['values'] = Caixa_Grupo()
 CMB_Del_Group["state"] = 'readonly'
+CMB_Del_Group.set("SELECIONE")
 CMB_Del_Group.bind("<Return>", Group_Select)
 CMB_Del_Group.bind("<<ComboboxSelected>>", Group_Select)
 CMB_Del_Group.place(x=80, y=45)
