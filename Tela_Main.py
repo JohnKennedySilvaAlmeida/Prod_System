@@ -733,6 +733,12 @@ def Register_Users(event=None):
             return False
         return True
 
+    # Função Criada para Limitar Tamanho de caracteres do CPF
+    def limitar_Size_Cpf(CPF):
+        if len(CPF) > 14:
+            return False
+        return True
+
     # Função criada para Apagar dados Digitados
     def Limpar_Dados():
         Var_Nome_User.set("")
@@ -774,6 +780,7 @@ def Register_Users(event=None):
         if len(Var_Cod_Tel.get()) == 2:
             ETelCel.focus()
 
+    # Função Criada para limitar a 11 caracteres no Login e também somente Números
     def validate(action, index, value_if_allowed,
                  prior_value, text, validation_type, widget_name, possible_new_value, login):
 
@@ -781,6 +788,21 @@ def Register_Users(event=None):
             try:
                 float(value_if_allowed)
                 if len(login) > 11:
+                    return False
+                return True
+            except ValueError:
+                return False
+        else:
+            return False
+
+    # Função Criada para limitar a 11 caracteres no Fone e também somente Números
+    def validate_2(action, index, value_if_allowed,
+                 prior_value, text, validation_type, widget_name, possible_new_value, fone):
+
+        if text in '0123456789':
+            try:
+                float(value_if_allowed)
+                if len(fone) > 9:
                     return False
                 return True
             except ValueError:
@@ -896,6 +918,7 @@ def Register_Users(event=None):
     Foto_User = PhotoImage(file="Imagens\\usuario.png")
     Foto_Salvar = PhotoImage(file="Imagens\\Save.png")
     Vcmd = (Windows_User.register(validate), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W', '%P')
+    Vcmd2 = (Windows_User.register(validate_2), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W', '%P')
     # Recebendo Configurações de Combobox para mudança de Cores
     Windows_User.option_add('*TCombobox*Listbox.font', Fonte11)
     Windows_User.option_add('*TCombobox*Listbox.selectBackground', Verde)
@@ -961,7 +984,9 @@ def Register_Users(event=None):
     Var_Cpf_User = StringVar()
     LblCpf_User = Label(Tela_Pessoal, text="CPF:", font=Fonte11B, bg=Cinza40, fg=Branco)
     LblCpf_User.place(x=10, y=75)
+    Valided_Cpf = Tela_Password.register(func=limitar_Size_Cpf)
     EntCpf_User = Entry(Tela_Pessoal, font=Fonte12, width=18, textvariable=Var_Cpf_User, justify=CENTER)
+    EntCpf_User.config(validate='key', validatecommand=(Valided_Cpf, '%P'))
     EntCpf_User.bind("<KeyRelease>", format_cpf)
     EntCpf_User.place(x=80, y=75)
     # -----------------------------------------------------------------------------------------------------------------
@@ -1032,7 +1057,7 @@ def Register_Users(event=None):
     ETelCelCodA.place(x=80, y=180, width=30)
     ETelCelCodA.bind("<KeyRelease>", Cod_Area)
 
-    ETelCel = Entry(Tela_Pessoal, font=Fonte11, validatecommand=Vcmd, validate='key', textvariable=Var_Tel)
+    ETelCel = Entry(Tela_Pessoal, font=Fonte11, validatecommand=Vcmd2, validate='key', textvariable=Var_Tel)
     ETelCel.place(x=130, y=180, width=100)
 
     Lbl_3 = Label(Tela_Pessoal, text="-", font=Fonte11B, bg=Cinza40, fg=Branco).place(x=115, y=180)
