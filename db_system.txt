@@ -61,3 +61,22 @@ CREATE TABLE bd_system.sale (
  PRIMARY KEY (id),
  FOREIGN KEY (idProd) REFERENCES bd_system.prod(id_prod))
  ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+ CREATE TABLE bd_system.store (
+ id_store integer(10) NOT NULL,
+ name_store VARCHAR(100) NOT NULL,
+ name_fantasia_store VARCHAR(50) NOT NULL,
+ tel_store VARCHAR(20),
+ cnpj_store VARCHAR(20),
+ inscr_stad_store VARCHAR(20),
+ cep_store VARCHAR(9),
+ street_store VARCHAR(50),
+ num_store VARCHAR(10),
+ district_store VARCHAR(50),
+ city_store VARCHAR(50),
+ uf_store VARCHAR(2),
+ email_store VARCHAR(50),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_store))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
