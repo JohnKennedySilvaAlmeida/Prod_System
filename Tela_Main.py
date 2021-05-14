@@ -82,6 +82,12 @@ def Register_Users(event=None):
 def Consulta_Prod(event=None):
     import Consulta_Prod
 
+def Register_Store(event=None):
+    import Register_Store
+
+def Register_Industry(event=None):
+    import Register_Ind
+
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # ---------------------------------------------------------------------------------------------------------------------
@@ -205,8 +211,13 @@ Arquivo.menu.add_cascade(label="GRUPO", menu=GrupoMenu, font=Fonte_teste, backgr
                          activebackground=Cinza40)
 Arquivo.menu.add_cascade(label="PRODUTOS", font=Fonte_teste, menu=ProdutosMenu, background=Cinza_Novo,
                          activebackground=Cinza40)
+Arquivo.menu.add_command(label="FORNECEDOR", font=Fonte_teste, background=Cinza_Novo, activebackground=Cinza40,
+                         command=Register_Industry)
+Arquivo.menu.add_command(label="LOJA", font=Fonte_teste, background=Cinza_Novo, activebackground=Cinza40,
+                         command=Register_Store)
 Arquivo.menu.add_command(label="SAIR", font=Fonte_teste, background=Cinza_Novo, activebackground=Vermelho,
                          command=Sair_Tela_Inicial)
+
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
 # Cadastro de Tecla Atalho

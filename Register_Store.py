@@ -37,18 +37,20 @@ def Consulta_Existente(event=None):
         Cursor_Existente_Loja = Conexao.cursor()
         Cursor_Existente_Loja.execute("SELECT ID_STORE FROM STORE WHERE ID_STORE = '%s'" % Var_Cod_Loja.get().strip())
         Cod_Valido = Cursor_Existente_Loja.fetchall()
+        Conexao.close()
         if Var_Cod_Loja.get() == "":
-            messagebox.showinfo("ERROR", "DIGITE O CÓDIGO DA LOJA", parent=Windows_Cad_Store)
-            EntCod_Loja.focus_set()
+            messagebox.showinfo("ERRO", "DIGITE O CÓDIGO DA LOJA", parent=Windows_Cad_Store)
+            EntCod_Loja.focus()
         else:
             if Cod_Valido == ():
                 EntNome_Loja.focus()
+                EntCod_Loja.config(state=DISABLED)
             else:
-                messagebox.showinfo("ERROR", "CLIENTE JÁ CADASTRADO", parent=Windows_Cad_Store)
+                messagebox.showinfo("ERRO", "CLIENTE JÁ CADASTRADO", parent=Windows_Cad_Store)
                 Var_Cod_Loja.set("")
                 EntCod_Loja.focus()
     except:
-        messagebox.showinfo("ERROR", "ALGO DEU ERRADO", parent=Windows_Cad_Store)
+        messagebox.showinfo("ERRO", "ALGO DEU ERRADO", parent=Windows_Cad_Store)
 
 
 def Codigo_num(action, index, value_if_allowed,
@@ -83,11 +85,15 @@ def Title2(event=None):
 
 def Codigo_Area(event=None):
     if len(VarCod_Tel_Loja.get()) == 2:
-        ETelCel_Loja.focus()
+        EntTel_Loja.focus()
 
 
 def Capitalise(event=None):
     Var_Rua_Loja.set(EntRua_Loja.get().title())
+
+
+def Capitalise3(event=None):
+    Var_Fantasia_Loja.set(Var_Fantasia_Loja.get().title())
 
 
 def Format_cnpj(event=None):
@@ -123,6 +129,12 @@ def Cursor_2(event=None):
         if Var_Cidade_Loja.get() == "":
             EntCidade_Loja.focus()
         else:
+            EntNome_Loja.config(state=DISABLED)
+            EntFantasia_Loja.config(state=DISABLED)
+            EntCod_Area_Loja.config(state=DISABLED)
+            EntTel_Loja.config(state=DISABLED)
+            Ent_cnpj_Loja.config(state=DISABLED)
+            Ent_insc_est_Loja.config(state=DISABLED)
             EntEmail_Loja.focus()
 
 
@@ -152,21 +164,22 @@ def Botap_Salvar_saindo(event=None):
     LblBtn_Salvar.config(fg=Cinza_Novo)
 
 
-def Salvar_Cliente(event=None):
+def Save_Store(event=None):
 
-    if Var_Cod_Loja.get() == "" or\
-            Var_Nome_Loja.get().get() == "" or\
-            Var_Fantasia_Loja.get() == "" or\
-            VarCod_Tel_Loja.get() == "" or\
-            Var_Tel_Loja.get() == "" or\
-            Var_cnpj_Loja.get() == "" or\
-            Var_insc_est_Loja.get() == "" or\
-            Var_Cep_Loja.get() == "" or\
-            Var_Rua_Loja.get() == "" or\
-            Var_Num_Loja.get() == "" or\
-            Var_Bairro_Loja.get() == "" or\
-            Var_Cidade_Loja.get() == "" or\
-            Var_Uf_Loja.get() == "" or\
+    if Var_Cod_Loja.get() == "" or \
+            Var_Nome_Loja.get() == "" or \
+            Var_Fantasia_Loja.get() == "" or \
+            VarCod_Tel_Loja.get() == "" or \
+            Var_Tel_Loja.get() == "" or \
+            Var_cnpj_Loja.get() == "" or \
+            Var_insc_est_Loja.get() == "" or \
+            Var_Cep1_Loja.get() == "" or \
+            Var_Cep2_Loja.get() == "" or \
+            Var_Rua_Loja.get() == "" or \
+            Var_Num_Loja.get() == "" or \
+            Var_Bairro_Loja.get() == "" or \
+            Var_Cidade_Loja.get() == "" or \
+            Var_Uf_Loja.get() == "" or \
             Var_Email_Loja.get() == "":
         messagebox.showinfo("VAZIO", "HÁ DADOS FALTANDO!", parent=Windows_Cad_Store)
 
@@ -175,35 +188,36 @@ def Salvar_Cliente(event=None):
                                      f"VOCÊ CONFIRMA O CADASTRO DA LOJA\n{Var_Nome_Loja.get().upper()}",
                                      parent=Windows_Cad_Store)
         if Confir == True:
-            try:
-                Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
-                Cursor_Bd_Store = Conexao.cursor()
-                Telefone_Loja = f"{VarCod_Tel_Loja.get()}-{Var_Tel_Loja.get()}"
-                Store = ("INSERT INTO CLIENTES(ID_STORE, NAME_STORE, NAME_FANTASIA_STORE, TEL_STORE, "
-                            "CNPJ_STORE, INSCR_STAD_STORE, CEP_STORE, STREET_STORE, NUM_STORE, DISTRICT_STORE, "
-                            "CITY_STORE, UF_STORE, EMAIL_STORE)"
-                            "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
-                Parametros_Clientes = (Var_Cod_Loja.get(),
-                                       Var_Nome_Loja.get(),
-                                       Var_Fantasia_Loja.get(),
-                                       Telefone_Loja,
-                                       Var_cnpj_Loja.get(),
-                                       Var_insc_est_Loja.get(),
-                                       Var_Cep_Loja.get(),
-                                       Var_Rua_Loja.get(),
-                                       Var_Num_Loja.get(),
-                                       Var_Bairro_Loja.get(),
-                                       Var_Cidade_Loja.get(),
-                                       Var_Uf_Loja.get(),
-                                       Var_Email_Loja.get())
-                Cursor_Bd_Store.execute(Store, Parametros_Clientes)
-                Conexao.commit()
-                Conexao.close()
-                messagebox.showinfo("SUCESSO", f"CLIENTE {Var_Nome_Loja.get()}\nCADASTRADO COM SUCESSO",
-                                    parent=Windows_Cad_Store)
-                Windows_Cad_Store.destroy()
-            except:
-                    messagebox.showinfo("CONEXÃO", "PROBLEMAS COM BANCO DE DADOS", parent=Windows_Cad_Store)
+
+            Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+            Cursor_Bd_Store = Conexao.cursor()
+            Telefone_Loja = f"{VarCod_Tel_Loja.get()}-{Var_Tel_Loja.get()}"
+            Cep_store = f"{Var_Cep1_Loja.get()}-{Var_Cep2_Loja.get()}"
+            Store = ("INSERT INTO STORE(ID_STORE, NAME_STORE, NAME_FANTASIA_STORE, TEL_STORE, "
+                        "CNPJ_STORE, INSCR_STAD_STORE, CEP_STORE, STREET_STORE, NUM_STORE, DISTRICT_STORE, "
+                        "CITY_STORE, UF_STORE, EMAIL_STORE)"
+                        "VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);")
+            Parametros_Clientes = (Var_Cod_Loja.get(),
+                                   Var_Nome_Loja.get(),
+                                   Var_Fantasia_Loja.get(),
+                                   Telefone_Loja,
+                                   Var_cnpj_Loja.get(),
+                                   Var_insc_est_Loja.get(),
+                                   Cep_store,
+                                   Var_Rua_Loja.get(),
+                                   Var_Num_Loja.get(),
+                                   Var_Bairro_Loja.get(),
+                                   Var_Cidade_Loja.get(),
+                                   Var_Uf_Loja.get(),
+                                   Var_Email_Loja.get())
+            Cursor_Bd_Store.execute(Store, Parametros_Clientes)
+            Conexao.commit()
+            Conexao.close()
+            messagebox.showinfo("SUCESSO", f"CLIENTE {Var_Nome_Loja.get()}\nCADASTRADO COM SUCESSO",
+                                parent=Windows_Cad_Store)
+            Windows_Cad_Store.destroy()
+            #except:
+            #        messagebox.showinfo("CONEXÃO", "PROBLEMAS COM BANCO DE DADOS", parent=Windows_Cad_Store)
         else:
             Var_Cod_Loja.set("")
             Var_Nome_Loja.set("")
@@ -212,7 +226,8 @@ def Salvar_Cliente(event=None):
             Var_Tel_Loja.set("")
             Var_cnpj_Loja.set("")
             Var_insc_est_Loja.set("")
-            Var_Cep_Loja.set("")
+            Var_Cep1_Loja.set("")
+            Var_Cep2_Loja.set("")
             Var_Rua_Loja.set("")
             Var_Num_Loja.set("")
             Var_Bairro_Loja.set("")
@@ -304,7 +319,7 @@ def ConsultarCep(event=None):
             Windows_Cad_Store.destroy()
 
 
-Windows_Cad_Store = Tk()
+Windows_Cad_Store = Toplevel()
 Windows_Cad_Store.geometry("555x485+400+150")
 Windows_Cad_Store.title("SOFTWARE DE GERENCIAMENTO")
 Windows_Cad_Store.minsize(555, 485)
@@ -346,7 +361,7 @@ EntCod_Loja = Entry(FrLoja_Geral, font=Fonte12, width=10, textvariable=Var_Cod_L
                         validate='key', validatecommand=cod_unt)
 EntCod_Loja.place(x=80, y=5)
 EntCod_Loja.focus()
-EntCod_Loja.bind("<FocusOut>", Consulta_Existente)
+#EntCod_Loja.bind("<FocusOut>", Consulta_Existente)
 # ---------------------------------------------------------------------------------------------------------------------
 
 # Label e Entry da Razão da Loja
@@ -356,6 +371,7 @@ LblNome_Loja.place(x=5, y=40)
 EntNome_Loja = Entry(FrLoja_Geral, font=Fonte12, width=35, textvariable=Var_Nome_Loja)
 EntNome_Loja.place(x=100, y=40)
 EntNome_Loja.bind("<KeyRelease>", Title2)
+EntNome_Loja.bind("<FocusIn>", Consulta_Existente)
 # ---------------------------------------------------------------------------------------------------------------------
 
 # Label e Entry do Nome Fantasia da Loja
@@ -364,20 +380,21 @@ LblFantasia_Loja = Label(FrLoja_Geral, text="FANTASIA:", font=Fonte11B, bg=Cinza
 LblFantasia_Loja.place(x=5, y=75)
 EntFantasia_Loja = Entry(FrLoja_Geral, font=Fonte12, width=35, textvariable=Var_Fantasia_Loja)
 EntFantasia_Loja.place(x=100, y=75)
+EntFantasia_Loja.bind("<KeyRelease>", Capitalise3)
 # ---------------------------------------------------------------------------------------------------------------------
 
 # Label e Entry de Telefone da Loja
 VarCod_Tel_Loja = StringVar()
 Var_Tel_Loja = StringVar()
-LTelCel_Loja = Label(FrLoja_Geral, text='TELEFONE:', font=Fonte11B, bg=Cinza40, fg=Branco)
-LTelCel_Loja.place(x=5, y=110)
-ETelCelCodA_Loja = Entry(FrLoja_Geral, width=5, font=Fonte11, validatecommand=cod_tel, validate='key', justify=CENTER,
+LCod_Area_Loja = Label(FrLoja_Geral, text='TELEFONE:', font=Fonte11B, bg=Cinza40, fg=Branco)
+LCod_Area_Loja.place(x=5, y=110)
+EntCod_Area_Loja = Entry(FrLoja_Geral, width=5, font=Fonte11, validatecommand=cod_tel, validate='key', justify=CENTER,
                     textvariable=VarCod_Tel_Loja)
-ETelCelCodA_Loja.place(x=100, y=110, width=30)
-ETelCelCodA_Loja.bind("<KeyRelease>", Codigo_Area)
+EntCod_Area_Loja.place(x=100, y=110, width=30)
+EntCod_Area_Loja.bind("<KeyRelease>", Codigo_Area)
 
-ETelCel_Loja = Entry(FrLoja_Geral, font=Fonte11, validatecommand=cod_tel, validate='key', textvariable=Var_Tel_Loja)
-ETelCel_Loja.place(x=150, y=110, width=100)
+EntTel_Loja = Entry(FrLoja_Geral, font=Fonte11, validatecommand=cod_tel, validate='key', textvariable=Var_Tel_Loja)
+EntTel_Loja.place(x=150, y=110, width=100)
 
 Lbl_6 = Label(FrLoja_Geral, text="-", font=Fonte11B, bg=Cinza40, fg=Branco).place(x=135, y=110)
 Lbl_7 = Label(FrLoja_Geral, text="-", font=Fonte11B, bg=Cinza40, fg=Branco).place(x=135, y=110)
@@ -403,16 +420,19 @@ Ent_insc_est_Loja.bind("<FocusOut>", Next_Cep)
 # ---------------------------------------------------------------------------------------------------------------------
 
 # Campo CEP da Loja
-Var_Cep_Loja = StringVar()
+Var_Cep1_Loja = StringVar()
+Var_Cep2_Loja = StringVar()
 LblCep_Loja = Label(FrEnd_Loja, text='CEP: *', font=Fonte11B, background=Cinza40, fg=Branco)
 LblCep_Loja.place(x=5, y=5)
 ECep_Loja = Entry(FrEnd_Loja, font=Fonte11, width=5, validatecommand=cod_unt, validate='key', justify=CENTER)
+ECep_Loja.config(textvariable=Var_Cep1_Loja)
 ECep_Loja.place(x=60, y=5)
 ECep_Loja.bind("<KeyRelease>", Hifem)
 LblHifen = Label(FrEnd_Loja, text='-', font=Fonte12B, bg=Cinza40, fg=Branco)
 LblHifen.place(x=105, y=4)
 ECep2_Loja = Entry(FrEnd_Loja, font=Fonte11, width=3, validatecommand=cod_unt, validate='key', justify=CENTER)
 ECep2_Loja.place(x=117, y=5)
+ECep2_Loja.config(textvariable=Var_Cep2_Loja)
 ECep2_Loja.bind("<Return>", ConsultarCep)
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -467,8 +487,7 @@ LblEmail_Loja = Label(FrLoja_Geral, text="EMAIL:", font=Fonte11B, bg=Cinza40, fg
 LblEmail_Loja.place(x=5, y=340)
 EntEmail_Loja = Entry(FrLoja_Geral, font=Fonte12, width=45, textvariable=Var_Email_Loja)
 EntEmail_Loja.place(x=80, y=340)
-EntEmail_Loja.bind("<F2>", Salvar_Cliente)
-EntEmail_Loja.bind("<Return>", Salvar_Cliente)
+EntEmail_Loja.bind("<Return>", Save_Store)
 # ---------------------------------------------------------------------------------------------------------------------
 
 # ---- BOTÃO ----------------------------------------------------------------------------------------------------------
@@ -482,7 +501,7 @@ Btn_cep.bind("<Leave>", Saindo_Cliente)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---- BOTÃO ----------------------------------------------------------------------------------------------------------
 btSalvar_Loja = Button(Windows_Cad_Store, bg=Cinza_Novo, image=Foto_Salvar_Loja, activebackground=Cinza_Novo,
-                           command=Salvar_Cliente, borderwidth=0)
+                           command=Save_Store, borderwidth=0)
 btSalvar_Loja.image = Foto_Salvar_Loja
 btSalvar_Loja.place(x=484, y=12)
 btSalvar_Loja.bind("<Enter>", Botao_Salvar_emcima)

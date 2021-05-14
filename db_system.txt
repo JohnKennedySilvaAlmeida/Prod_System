@@ -80,3 +80,20 @@ CREATE TABLE bd_system.sale (
  updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
  PRIMARY KEY (id_store))
  ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+ CREATE TABLE bd_system.industry(
+ id_ind integer(10) NOT NULL AUTO_INCREMENT,
+ name_ind VARCHAR(100),
+ email_ind VARCHAR(50),
+ cep_ind VARCHAR(9),
+ street_ind VARCHAR(50),
+ number_ind VARCHAR(10),
+ bairro_ind VARCHAR(50),
+ city_ind VARCHAR(50),
+ state_ind VARCHAR(2),
+ last_pay_ind DATE,
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_ind))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
