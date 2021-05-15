@@ -33,7 +33,7 @@ def Autenticar_Login(event=None):
     for psw in Curso_Pwrd.fetchall():
         Id_Pswd = psw[0]
         
-    if Id_Login == Id_Pswd and Id_login != "" and Id_Pswod != "":
+    if Id_Login == Id_Pswd and Id_login != "" and Id_Pswd != "":
         Windows_Login.destroy()
         Conexao.close()
         import Tela_Main
