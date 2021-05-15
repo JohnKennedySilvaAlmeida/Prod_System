@@ -1,11 +1,9 @@
 # ---------------- CENTRADA DE NOTA -----------------------------------------------------------------------------------
 from tkinter import *
 from tkinter import messagebox
-from tkcalendar import DateEntry
-from tkinter.ttk import Combobox
 from tkinter.ttk import Treeview
+from tkcalendar import DateEntry
 import pymysql
-import datetime
 
 
 def QTDE(action, index, value_if_allowed,
@@ -19,6 +17,41 @@ def QTDE(action, index, value_if_allowed,
     else:
         return False
 
+def CimaPed_Salvar(event=None):
+    LblNota_Salvar.config(fg=Branco)
+
+def SCimaPed_Salvar(event=None):
+    LblNota_Salvar.config(fg=Cinza_Novo)
+
+
+def Descricao_Prod(event=None):
+
+    try:
+        Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+        Cursor_Descricao = Conexao.cursor()
+        Cursor_Descricao.execute("SELECT NAME_PROD, VALUE_PROD FROM PROD WHERE BAR_CODE = '%s';" % Var_Bar_Prod.get())
+        Texto_Prod = ""
+        Preco_Prod = 0.0
+
+        for id in Cursor_Descricao.fetchall():
+            Texto_Prod = id[0]
+            Preco_Prod = id[1]
+
+        if Texto_Prod == "":
+            messagebox.showinfo("ERROR", "CÓDIGO DE PRODUTO INEXISTENTE")
+            Var_Bar_Prod.set("")
+            EntCod_Prod.focus()
+        else:
+            if len(Texto_Prod) <= 35:
+                Img_Descricao.config(text=Texto_Prod)
+            else:
+                Img_Descricao.config(text=f"{Texto_Prod[:31]}...")
+            EntQtde.focus()
+            Var_Preco_Unt.set(Preco_Prod)
+            Conexao.close()
+
+    except:
+        messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS")
 
 # Variaveis de Cor
 Branco = "White"
@@ -60,11 +93,11 @@ Windows_Entry_Note.iconbitmap("Imagens/Logo_SFundo.ico")
 Foto_Salvar_Pedidos = PhotoImage(file="Imagens//Save.png")
 Foto_Sair_Pedidos = PhotoImage(file="Imagens//Cancel.png")
 Img_Bar_Code = PhotoImage(file="Imagens//Bar_Cod.png")
-Qtde_unt = (Windows_Entry_Note.register(QTDE), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W')
+QTDE_Number = (Windows_Entry_Note.register(QTDE), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W', '%P')
 # ---------------------------------------------------------------------------------------------------------------------
 # Label para criar aviso do botão Salvar
-LblPed_Salvar = Label(Windows_Entry_Note, text="Salvar", bg=Cinza_Novo, fg=Cinza_Novo, font=Fonte10)
-LblPed_Salvar.place(x=754, y=54)
+LblNota_Salvar = Label(Windows_Entry_Note, text="Salvar", bg=Cinza_Novo, fg=Cinza_Novo, font=Fonte10)
+LblNota_Salvar.place(x=808, y=54)
 # ---------------------------------------------------------------------------------------------------------------------
 # Imagem do Codigo de Barras
 Img_Cod_Bar = Label(Windows_Entry_Note, image=Img_Bar_Code, border=0, bg=Cinza_Novo)
@@ -120,14 +153,17 @@ Var_Cod_Nota = StringVar()
 LblCod_Nota = Label(Fr_Cabecalho, text="NUM° NOTA:", font=Fonte11B, bg=Cinza40, fg=Branco)
 LblCod_Nota.place(x=5, y=8)
 EntCod_Nota = Entry(Fr_Cabecalho, font=Fonte12, width=14, textvariable=Var_Cod_Nota, justify=CENTER)
+EntCod_Nota.config(validatecommand=QTDE_Number, validate='key')
 EntCod_Nota.place(x=105, y=8)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 # ----- LABELFRAME INFORMAÇÕES DO CLIENTE -----------------------------------------------------------------------------
+Var_Cod_Forn = StringVar()
 Lbl_Cod_Fornec = Label(FrInf_Cli, text="CÓDIGO:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Cod_Fornec.place(x=5, y=20)
-Lbl_Cod_Fornec = Entry(FrInf_Cli, font=Fonte11, width=12, disabledbackground=Cinza90, disabledforeground=Branco)
-Lbl_Cod_Fornec.place(x=90, y=20)
+Ent_Cod_Fornec = Entry(FrInf_Cli, font=Fonte11, width=12, disabledbackground=Cinza90, validate='key')
+Ent_Cod_Fornec.config(disabledforeground=Branco, validatecommand=QTDE_Number, textvariable=Var_Cod_Forn)
+Ent_Cod_Fornec.place(x=90, y=20)
 # ---------------------------------------------------------------------------------------------------------------------
 Lbl_Nome_Fornec = Label(FrInf_Cli, text="RAZÃO SOCIAL:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Nome_Fornec.place(x=5, y=60)
@@ -143,8 +179,8 @@ Ent_Rua_Fornec.place(x=50, y=90)
 # ---------------------------------------------------------------------------------------------------------------------
 Lbl_Num_Fornec = Label(FrInf_Cli, text="N°", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Num_Fornec.place(x=345, y=90)
-Ent_Num_Fornec = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Ent_Num_Fornec = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza90)
+Ent_Num_Fornec.config(disabledforeground=Branco, validate='key', validatecommand=QTDE_Number)
 Ent_Num_Fornec.place(x=378, y=90)
 # ---------------------------------------------------------------------------------------------------------------------
 Lbl_Bairro_Fornec = Label(FrInf_Cli, text="BAIRRO:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
@@ -161,8 +197,8 @@ Ent_Cidade_Fornec.place(x=281, y=120)
 # ---------------------------------------------------------------------------------------------------------------------
 Lbl_User = Label(FrInf_Cli, text="COLABORADOR:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_User.place(x=5, y=150)
-Ent_User = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Ent_User = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza90)
+Ent_User.config(validatecommand=QTDE_Number, disabledforeground=Branco, validate='key')
 Ent_User.place(x=140, y=150)
 # ---------------------------------------------------------------------------------------------------------------------
 # ----- DADOS DA ULTIMA COMPRA ----------------------------------------------------------------------------------------
@@ -190,12 +226,11 @@ Ano_ULt_Compra.place(x=150, y=3)
 # ---------------------------------------------------------------------------------------------------------------------
 # ----- LABELFRAME INSERIR PRODUTOS -----------------------------------------------------------------------------------
 # Label e Entry Codigo do Produto
-Var_Cod_Prod = StringVar()
-Var_Cod_Prod.set("")
+Var_Bar_Prod = StringVar()
 LblCod_Prod = Label(FrInsert_Ped, text="COD BARRAS:", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 LblCod_Prod.place(x=5, y=10)
-EntCod_Prod = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Cod_Prod, width=20, justify=CENTER,
-                    disabledbackground=Cinza90)
+EntCod_Prod = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Bar_Prod, width=20, justify=CENTER, validate='key')
+EntCod_Prod.config(disabledbackground=Cinza90, validatecommand=QTDE_Number)
 EntCod_Prod.place(x=130, y=10)
 # ---------------------------------------------------------------------------------------------------------------------
 # Imagem da Descrição do Produto
@@ -207,8 +242,8 @@ Var_Qtde = StringVar()
 Var_Qtde.set("")
 LblQtde = Label(FrInsert_Ped, text="QTDE:", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 LblQtde.place(x=5, y=40)
-EntQtde = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Qtde, width=4, justify=CENTER, validate='key',
-                state=DISABLED, disabledbackground=Cinza90)
+EntQtde = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Qtde, width=4, justify=CENTER, validate='key')
+EntQtde.config(state=DISABLED, disabledbackground=Cinza90, validatecommand=QTDE_Number)
 EntQtde.place(x=85, y=40)
 # ---------------------------------------------------------------------------------------------------------------------
 # Label e Entry Preço do Item
@@ -225,8 +260,8 @@ Var_Desc = StringVar()
 Var_Desc.set("")
 LblDesc_Iten = Label(FrInsert_Ped, text="DESC:", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 LblDesc_Iten.place(x=5, y=100)
-EntDesc = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Desc, width=10, justify=CENTER, state=DISABLED,
-                 disabledbackground=Cinza90, disabledforeground=Branco)
+EntDesc = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Desc, width=10, justify=CENTER, state=DISABLED)
+EntDesc.config(disabledbackground=Cinza90, disabledforeground=Branco, validatecommand=QTDE_Number)
 EntDesc.place(x=85, y=100)
 # ---------------------------------------------------------------------------------------------------------------------
 # Label e Entry Total do Item
@@ -288,5 +323,7 @@ btSalvar_Pedidos = Button(Windows_Entry_Note, bg=Cinza_Novo, image=Foto_Salvar_P
 btSalvar_Pedidos.config(borderwidth=0)
 btSalvar_Pedidos.image = Foto_Salvar_Pedidos
 btSalvar_Pedidos.place(x=804, y=9)
+btSalvar_Pedidos.bind("<Enter>", CimaPed_Salvar)
+btSalvar_Pedidos.bind("<Leave>", SCimaPed_Salvar)
 # ------------------------ FIM ----------------------------------------------------------------------------------------
 Windows_Entry_Note.mainloop()
