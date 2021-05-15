@@ -13,7 +13,7 @@ CREATE TABLE bd_system.users (
  id integer(10) AUTO_INCREMENT,
  name_user VARCHAR(40) NOT NULL,
  cpf VARCHAR(12) NOT NULL,
- birth_date DATE NOT NULL,
+ birth_date DATE,
  fone VARCHAR(10),
  email VARCHAR(40),
  login_user VARCHAR(40) NOT NULL,
