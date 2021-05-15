@@ -32,8 +32,8 @@ def Autenticar_Login(event=None):
         Id_Login = log[0]
     for psw in Curso_Pwrd.fetchall():
         Id_Pswd = psw[0]
-
-    if Id_Login == Id_Pswd:
+        
+    if Id_Login == Id_Pswd and Id_login != "" and Id_Pswod != "":
         Windows_Login.destroy()
         Conexao.close()
         import Tela_Main
@@ -57,8 +57,8 @@ Imagem_BarraCinza = PhotoImage(file="Imagens\\Barra_LogoCinza.png")
 Imagem_BarraCinza2 = PhotoImage(file="Imagens\\Barra_LogoCinza2.png")
 
 # -----------------------------------------------------------------------------------------------------------------
-Lbl_Titulo9 = Label(Windows_Login, text="----" * 8, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
-Lbl_Titulo9.place(x=0, y=10)
+#Lbl_Titulo9 = Label(Windows_Login, text="----" * 8, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+#Lbl_Titulo9.place(x=0, y=10)
 # -----------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -67,16 +67,16 @@ Lbl_Barra_Cinza = Label(Windows_Login, image=Imagem_BarraCinza, bg=Cinza_Novo)
 Lbl_Barra_Cinza.image = Imagem_BarraCinza
 Lbl_Barra_Cinza.place(x=370, y=160)
 # Criando Label para Anexar Imagem
-Lbl_Barra_Cinza2 = Label(Windows_Login, image=Imagem_BarraCinza2, bg=Cinza_Novo)
-Lbl_Barra_Cinza2.image = Imagem_BarraCinza2
-Lbl_Barra_Cinza2.place(x=3, y=50)
+#Lbl_Barra_Cinza2 = Label(Windows_Login, image=Imagem_BarraCinza2, bg=Cinza_Novo)
+#Lbl_Barra_Cinza2.image = Imagem_BarraCinza2
+#Lbl_Barra_Cinza2.place(x=3, y=50)
 # Criando Label para Anexar Imagem
 Lbl_Barra_Dourada = Label(Windows_Login, image=Imagem_BarraCinza, bg=Cinza_Novo)
 Lbl_Barra_Dourada.image = Imagem_BarraCinza
 Lbl_Barra_Dourada.place(x=370, y=20)
 # ---------------------------------------------------------------------------------------------------------------------
 Lbl_Sauda = Label(Windows_Login, text="BEM VINDO!", bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte_14B, anchor=W)
-Lbl_Sauda.place(x=140, y=80, width=120)
+Lbl_Sauda.place(x=140, y=69, width=120)
 # ---------------------------------------------------------------------------------------------------------------------
 # Criando Variaveis pra receber valor digitado
 VarNome_User = StringVar()
