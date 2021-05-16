@@ -31,9 +31,9 @@ Windows.title("SOFTWARE DE GERENCIAMENTO")
 # Windows.minsize(1300, 750)
 # Windows.maxsize(1300, 750)
 # Ajusta tela conforme tamnho munitor
-Windows.winfo_screenwidth() 
-Windows.winfo_screenheight()
 Windows.resizable(True, True)
+Windows.winfo_screenwidth()
+Windows.winfo_screenheight()
 Windows["bg"] = Branco
 
 
@@ -99,6 +99,7 @@ def Register_Store(event=None):
 
 def Register_Industry(event=None):
     import Register_Ind
+
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -255,6 +256,5 @@ Windows.bind_all("<Control-p>", Register_Prod)
 Windows.bind_all("<Control-m>", Register_Group)
 
 # Desativando o Botão X da Tela
-Windows.protocol("WM_DELETE_WINDOW", Desativar_Max)
-Windows.iconbitmap("Imagens/Logo_SFundo.ico")
+Windows.iconbitmap("Imagens/logo.ico")
 Windows.mainloop()

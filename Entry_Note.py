@@ -100,7 +100,6 @@ def Tot_por_Prod(event=None):
             # Conexao.commit()
             # Conexao.close()
             lista_prod_note.append(Codigo_bar)
-            print(lista_prod_note)
             tree_Fornecedor.insert("", 'end', text=Var_Qtde.get(), tag='oddrow',
                                    values=(
                                    Var_Bar_Prod.get(), Texto_Prod, "R$ {:.2f}".format(float(Var_Preco_Unt.get())),

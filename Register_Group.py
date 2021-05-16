@@ -95,7 +95,8 @@ Lbl_Titulo4 = Label(Windows_Cad_Group, text="----" * 6, bg=Cinza_Novo, fg=Amarel
 Lbl_Titulo4.place(x=0, y=10)
 # -----------------------------------------------------------------------------------------------------------------
 
-Frame_Group = LabelFrame(Windows_Cad_Group, text="CADASTRO DE GRUPO", bg=Cinza40, fg=Amarelo_Novo, font=Fonte11B)
+Frame_Group = LabelFrame(Windows_Cad_Group, text="GRUPO DE PRODUTO", bg=Cinza40, fg=Amarelo_Novo,
+                         font=Fonte11B)
 Frame_Group.place(x=5, y=70, width=350, height=115)
 # -----------------------------------------------------------------------------------------------------------------
 # Label e Entry do CODIGO do GROUP

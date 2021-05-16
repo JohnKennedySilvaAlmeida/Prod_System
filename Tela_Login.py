@@ -32,8 +32,8 @@ def Autenticar_Login(event=None):
         Id_Login = log[0]
     for psw in Curso_Pwrd.fetchall():
         Id_Pswd = psw[0]
-        
-    if Id_Login == Id_Pswd and Id_Login != "" and Id_Pswd != "":
+
+    if Id_Login == Id_Pswd: # and Id_Login != "" and Id_Pswd != "":
         Windows_Login.destroy()
         Conexao.close()
         import Tela_Main
@@ -47,7 +47,7 @@ def Autenticar_Login(event=None):
 # Criando o TK Tela de Login Principal
 Windows_Login = Tk()
 Windows_Login.geometry("400x300+450+200")  # Tamanho da Janela
-Windows_Login.iconbitmap("Imagens\\Logo_SFundo.ico")  # Anexando o Icone na Tela
+Windows_Login.iconbitmap("Imagens/logo.ico")  # Anexando o Icone na Tela
 Windows_Login.resizable(False, False)  # Desativando o Botão Maximizar a Janela
 Windows_Login.title("LOGIN")  # Criando Titulo na Janela
 Windows_Login.config(bg=Cinza_Novo)  # Determinando cor de fundo da janela, podendo criar outros atributos
@@ -57,23 +57,9 @@ Imagem_BarraCinza = PhotoImage(file="Imagens\\Barra_LogoCinza.png")
 Imagem_BarraCinza2 = PhotoImage(file="Imagens\\Barra_LogoCinza2.png")
 
 # -----------------------------------------------------------------------------------------------------------------
-#Lbl_Titulo9 = Label(Windows_Login, text="----" * 8, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
-#Lbl_Titulo9.place(x=0, y=10)
-# -----------------------------------------------------------------------------------------------------------------
-
+Lbl_Titulo9 = Label(Windows_Login, text="----" * 8, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+Lbl_Titulo9.place(x=0, y=10)
 # ---------------------------------------------------------------------------------------------------------------------
-# Criando Label para Anexar Imagem
-Lbl_Barra_Cinza = Label(Windows_Login, image=Imagem_BarraCinza, bg=Cinza_Novo)
-Lbl_Barra_Cinza.image = Imagem_BarraCinza
-Lbl_Barra_Cinza.place(x=370, y=160)
-# Criando Label para Anexar Imagem
-#Lbl_Barra_Cinza2 = Label(Windows_Login, image=Imagem_BarraCinza2, bg=Cinza_Novo)
-#Lbl_Barra_Cinza2.image = Imagem_BarraCinza2
-#Lbl_Barra_Cinza2.place(x=3, y=50)
-# Criando Label para Anexar Imagem
-Lbl_Barra_Dourada = Label(Windows_Login, image=Imagem_BarraCinza, bg=Cinza_Novo)
-Lbl_Barra_Dourada.image = Imagem_BarraCinza
-Lbl_Barra_Dourada.place(x=370, y=20)
 # ---------------------------------------------------------------------------------------------------------------------
 Lbl_Sauda = Label(Windows_Login, text="BEM VINDO!", bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte_14B, anchor=W)
 Lbl_Sauda.place(x=140, y=69, width=120)
