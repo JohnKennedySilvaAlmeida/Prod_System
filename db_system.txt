@@ -1,0 +1,124 @@
+-- Banco d dados
+-- t1 - create -> user(id, nome, cpf, birth_date, fone, email, login, password, departament) - tabela usuarios
+-- t2 - create -> group_prod(id, name_group) - tabela de grupos
+-- t3 - create -> prod(id, name_prod, bar_code, group_prod, value_prod) - tabelas produtos
+-- t4 - create -> stock(id, id_prod, id_group) - tabela estoque relacionamento grupo e produtos *
+-- t5 - create -> sale(id, valor, qnt, id_prod,format_payment) - tabela vendas relacionamento produtos
+
+CREATE DATABASE bd_system;
+
+use bd_system;
+
+CREATE TABLE bd_system.users (
+ id integer(10) AUTO_INCREMENT,
+ name_user VARCHAR(40) NOT NULL,
+ cpf VARCHAR(12) NOT NULL,
+ birth_date DATE NOT NULL,
+ fone VARCHAR(10),
+ email VARCHAR(40),
+ login_user VARCHAR(40) NOT NULL,
+ password VARCHAR(40) NOT NULL,
+ departament VARCHAR(30),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.group_prod (
+ id_group integer(10) NOT NULL AUTO_INCREMENT,
+ name_group VARCHAR(40) NOT NULL,
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_group))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.prod (
+ id_prod integer(10) NOT NULL AUTO_INCREMENT,
+ name_prod VARCHAR(50) NOT NULL,
+ bar_code VARCHAR(13) NOT NULL,
+ group_prod VARCHAR(40),
+ value_prod DECIMAL(10,2),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_prod))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.stock (
+ id integer(10) NOT NULL AUTO_INCREMENT,
+ idProd int(10) NOT NULL,
+ idGroup int(10) NOT NULL,
+ PRIMARY KEY (id),
+ FOREIGN KEY (idProd) REFERENCES bd_system.prod(id_prod),
+ FOREIGN KEY (idGroup) REFERENCES bd_system.group_prod(id_group))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+CREATE TABLE bd_system.sale (
+ id integer(10) NOT NULL AUTO_INCREMENT,
+ values_prod VARCHAR(20),
+ qnt_sales VARCHAR(20),
+ format_payment VARCHAR(30),
+ idProd int(10) NOT NULL,
+ PRIMARY KEY (id),
+ FOREIGN KEY (idProd) REFERENCES bd_system.prod(id_prod))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+ CREATE TABLE bd_system.store (
+ id_store integer(10) NOT NULL,
+ name_store VARCHAR(100) NOT NULL,
+ name_fantasia_store VARCHAR(50) NOT NULL,
+ tel_store VARCHAR(20),
+ cnpj_store VARCHAR(20),
+ inscr_stad_store VARCHAR(20),
+ cep_store VARCHAR(9),
+ street_store VARCHAR(50),
+ num_store VARCHAR(10),
+ district_store VARCHAR(50),
+ city_store VARCHAR(50),
+ uf_store VARCHAR(2),
+ email_store VARCHAR(50),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_store))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+ CREATE TABLE bd_system.industry(
+ id_ind integer(10) NOT NULL AUTO_INCREMENT,
+ name_ind VARCHAR(100),
+ email_ind VARCHAR(50),
+ cep_ind VARCHAR(9),
+ street_ind VARCHAR(50),
+ number_ind VARCHAR(10),
+ bairro_ind VARCHAR(50),
+ city_ind VARCHAR(50),
+ state_ind VARCHAR(2),
+ last_pay_ind DATE,
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_ind))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+ CREATE TABLE bd_system.itens_note(
+ id_item INTEGER(12) NOT NULL AUTO_INCREMENT,
+ cod_note_item integer(12) NOT NULL,
+ bar_code_prod VARCHAR(20),
+ qtde VARCHAR(10),
+ value_prod DECIMAL(10,2),
+ value_tot DECIMAL(10,2),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_item))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+ CREATE TABLE bd_system.note(
+ id_note integer(12) NOT NULL AUTO_INCREMENT,
+ cod_note VARCHAR(20),
+ id_fornec VARCHAR(20),
+ data DATE,
+ value_tot DECIMAL(10,2),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_note))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
