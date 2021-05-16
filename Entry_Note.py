@@ -6,6 +6,7 @@ import pymysql
 from tkcalendar import DateEntry
 
 
+lista_prod_note = []
 
 def QTDE(action, index, value_if_allowed,
          prior_value, text, validation_type, trigger_type, widget_name):
@@ -72,8 +73,6 @@ def Qtde_Prod(event=None):
 
 def Tot_por_Prod(event=None):
 
-    lista_prod_note = []
-
     try:
         Preco_Unt = (float(Var_Preco_Unt.get()))
     except:
@@ -101,6 +100,7 @@ def Tot_por_Prod(event=None):
             # Conexao.commit()
             # Conexao.close()
             lista_prod_note.append(Codigo_bar)
+            print(lista_prod_note)
             tree_Fornecedor.insert("", 'end', text=Var_Qtde.get(), tag='oddrow',
                                    values=(
                                    Var_Bar_Prod.get(), Texto_Prod, "R$ {:.2f}".format(float(Var_Preco_Unt.get())),
