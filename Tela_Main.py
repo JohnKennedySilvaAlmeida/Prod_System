@@ -26,11 +26,14 @@ Fonte12I = ("Courier", 12, "italic")
 Fonte_teste = ("Palatino Linotype", 12, "bold")
 
 Windows = Tk()
-Windows.geometry("1500x750+10+10")
-Windows.title("TK8 - SOFTWARE DE GERENCIAMENTO")
-Windows.minsize(1500, 750)
-Windows.maxsize(1500, 750)
-Windows.resizable(False, False)
+Windows.geometry("1300x725+10+10")
+Windows.title("SOFTWARE DE GERENCIAMENTO")
+# Windows.minsize(1300, 750)
+# Windows.maxsize(1300, 750)
+# Ajusta tela conforme tamnho munitor
+Windows.winfo_screenwidth() 
+Windows.winfo_screenheight()
+Windows.resizable(True, True)
 Windows["bg"] = Branco
 
 
@@ -112,10 +115,10 @@ Lbl_Linha_3.place(x=0, y=91, width=1500, height=4)
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 Lbl_Titulo = Label(Windows, text="SISTEMA DE GERENCIAMENTO", bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte_teste)
-Lbl_Titulo.place(x=1220, y=20)
+Lbl_Titulo.place(x=1100, y=20)#Ajusta tamnho dimanico - nao fixo
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-Lbl_Titulo2 = Label(Windows, text="----"*27, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
+Lbl_Titulo2 = Label(Windows, text="----"*15, bg=Cinza_Novo, fg=Amarelo_Novo, font=Fonte12I)
 Lbl_Titulo2.place(x=0, y=20)
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
