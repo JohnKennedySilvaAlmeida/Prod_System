@@ -1,8 +1,8 @@
 # ---------------- CADASTRO DE FORNECEDOR -----------------------------------------------------------------------------
 from tkinter import *
 from tkinter import messagebox
-import pymysql
 from pycep_correios import get_address_from_cep
+import pymysql
 import datetime
 
 # Variaveis de Cor

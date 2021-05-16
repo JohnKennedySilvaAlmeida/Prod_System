@@ -2,13 +2,25 @@
 from tkinter import *
 from tkinter import messagebox
 from tkinter.ttk import Treeview
-from tkcalendar import DateEntry
 import pymysql
+from tkcalendar import DateEntry
+
 
 
 def QTDE(action, index, value_if_allowed,
          prior_value, text, validation_type, trigger_type, widget_name):
     if text in '0123456789':
+        try:
+            float(value_if_allowed)
+            return True
+        except ValueError:
+            return False
+    else:
+        return False
+
+def Valor(action, index, value_if_allowed,
+         prior_value, text, validation_type, trigger_type, widget_name):
+    if text in '0123456789.':
         try:
             float(value_if_allowed)
             return True
@@ -23,19 +35,19 @@ def CimaPed_Salvar(event=None):
 def SCimaPed_Salvar(event=None):
     LblNota_Salvar.config(fg=Cinza_Novo)
 
-
 def Descricao_Prod(event=None):
 
     try:
         Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
         Cursor_Descricao = Conexao.cursor()
-        Cursor_Descricao.execute("SELECT NAME_PROD, VALUE_PROD FROM PROD WHERE BAR_CODE = '%s';" % Var_Bar_Prod.get())
+        Cursor_Descricao.execute("SELECT NAME_PROD FROM PROD WHERE BAR_CODE = '%s';" % Var_Bar_Prod.get())
+        global Texto_Prod
         Texto_Prod = ""
-        Preco_Prod = 0.0
+        global cod_barras
+        cod_barras = Var_Bar_Prod.get()
 
         for id in Cursor_Descricao.fetchall():
             Texto_Prod = id[0]
-            Preco_Prod = id[1]
 
         if Texto_Prod == "":
             messagebox.showinfo("ERROR", "CÓDIGO DE PRODUTO INEXISTENTE")
@@ -46,12 +58,104 @@ def Descricao_Prod(event=None):
                 Img_Descricao.config(text=Texto_Prod)
             else:
                 Img_Descricao.config(text=f"{Texto_Prod[:31]}...")
+            EntQtde.config(state=NORMAL)
             EntQtde.focus()
-            Var_Preco_Unt.set(Preco_Prod)
             Conexao.close()
 
     except:
         messagebox.showinfo("ERROR", "NÃO HÁ CONEXÃO COM O BANCO DE DADOS")
+
+def Qtde_Prod(event=None):
+    EntPreco_Unt.config(state=NORMAL)
+    Var_Preco_Unt.set("")
+    EntPreco_Unt.focus()
+
+def Tot_por_Prod(event=None):
+
+    lista_prod_note = []
+
+    try:
+        Preco_Unt = (float(Var_Preco_Unt.get()))
+    except:
+        messagebox.showinfo("ERRO", "VALOR INVALIDO")
+        EntPreco_Unt.focus()
+    try:
+        Quantidade_Prod = float(Var_Qtde.get())
+    except:
+        messagebox.showinfo("ERRO", "VALOR INVALIDO")
+        EntQtde.focus()
+
+    global cod_barras
+    total_prod = Preco_Unt * Quantidade_Prod
+    Var_Total.set("{:.2f}".format(float(total_prod)))
+    Codigo_bar = Var_Bar_Prod.get()
+    if Codigo_bar not in lista_prod_note:
+        Confirma = messagebox.askyesno("CONFIRMAÇÃO", "INSERIR ITEM", parent=Windows_Entry_Note)
+        if Confirma == True:
+            # Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+            # Cursor_Nota = Conexao.cursor()
+            # Nota = "INSERT INTO ITENS_NOTE(COD_NOTE_ITEM, BAR_CODE_PROD, QTDE, VALUE_PROD, VALUE_TOT)" \
+            #       "VALUES(%s, %s, %s, %s, %s);"
+            # Parametro_nota = (Var_Cod_Nota.get(), Var_Bar_Prod.get(), Quantidade_Prod, Preco_Unt, total_prod)
+            # Cursor_Nota.execute(Nota, Parametro_nota)
+            # Conexao.commit()
+            # Conexao.close()
+            lista_prod_note.append(Codigo_bar)
+            tree_Fornecedor.insert("", 'end', text=Var_Qtde.get(), tag='oddrow',
+                                   values=(
+                                   Var_Bar_Prod.get(), Texto_Prod, "R$ {:.2f}".format(float(Var_Preco_Unt.get())),
+                                   "R$ {:.2f}".format(float(Var_Total.get()))))
+            EntQtde.config(state=DISABLED)
+            EntPreco_Unt.config(state=DISABLED)
+            Var_Bar_Prod.set("")
+            Var_Qtde.set("")
+            Var_Total.set("")
+            Var_Preco_Unt.set("")
+            EntCod_Prod.focus()
+            Img_Descricao.config(text="")
+
+        else:
+            EntQtde.config(state=DISABLED)
+            EntPreco_Unt.config(state=DISABLED)
+            Var_Bar_Prod.set("")
+            Var_Qtde.set("")
+            Var_Total.set("")
+            Var_Preco_Unt.set("")
+    else:
+        print("ok")
+        messagebox.showinfo("EXISTENTE", "PRODUTO JA INSERIDO")
+
+def Focus_ID_Forn(event=None):
+    EntCod_Nota.config(state=DISABLED)
+    Ent_Cod_Fornec.focus()
+
+def Ident_Fornecedor(event=None):
+
+    Conexao = pymysql.connect(host="localhost", user="root", passwd="P@ssw0rd", db="BD_SYSTEM")
+    Cursor_Id_Forn = Conexao.cursor()
+    Cursor_Id_Forn.execute("SELECT NAME_IND, STREET_IND, NUMBER_IND, BAIRRO_IND, CITY_IND, LAST_PAY_IND FROM INDUSTRY "
+                           "WHERE ID_IND = '%s';" % Var_Cod_Forn.get())
+    for indus in Cursor_Id_Forn.fetchall():
+        Var_Forn_Name.set(indus[0])
+        Var_Forn_Rua.set(indus[1])
+        Var_Forn_Num.set(indus[2])
+        Var_Forn_Bairro.set(indus[3])
+        Var_Forn_City.set(indus[4])
+        Fornecedor_Ult_Compra = str(indus[5])
+
+    Dia_ULt_Compra.config(state=NORMAL)
+    Mes_ULt_Compra.config(state=NORMAL)
+    Ano_ULt_Compra.config(state=NORMAL)
+    Dia_ULt_Compra.insert(0, str(Fornecedor_Ult_Compra[8:]))
+    Mes_ULt_Compra.insert(0, str(Fornecedor_Ult_Compra[5:7]))
+    Ano_ULt_Compra.insert(0, str(Fornecedor_Ult_Compra[:4]))
+    Dia_ULt_Compra.config(state=DISABLED)
+    Mes_ULt_Compra.config(state=DISABLED)
+    Ano_ULt_Compra.config(state=DISABLED)
+    Ent_User.config(state=NORMAL)
+    Ent_User.focus()
+    Ent_Cod_Fornec.config(state=DISABLED)
+
 
 # Variaveis de Cor
 Branco = "White"
@@ -93,7 +197,8 @@ Windows_Entry_Note.iconbitmap("Imagens/Logo_SFundo.ico")
 Foto_Salvar_Pedidos = PhotoImage(file="Imagens//Save.png")
 Foto_Sair_Pedidos = PhotoImage(file="Imagens//Cancel.png")
 Img_Bar_Code = PhotoImage(file="Imagens//Bar_Cod.png")
-QTDE_Number = (Windows_Entry_Note.register(QTDE), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W', '%P')
+QTDE_Number = (Windows_Entry_Note.register(QTDE), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W')
+Valor_float = (Windows_Entry_Note.register(Valor), '%d', '%i', '%i', '%s', '%S', '%v', '%V', '%W')
 # ---------------------------------------------------------------------------------------------------------------------
 # Label para criar aviso do botão Salvar
 LblNota_Salvar = Label(Windows_Entry_Note, text="Salvar", bg=Cinza_Novo, fg=Cinza_Novo, font=Fonte10)
@@ -145,7 +250,6 @@ LblData.place(x=3, y=2)
 Dt_Atual = DateEntry(FrData, date_pattern='dd/MM/yyyy', width=17, bg=Cinza_Novo, fg=Branco, font=Fonte12,
                       headersbackground=Branco, borderwidth=2, selectbackground=Cinza_Novo, headersforeground=Cinza60)
 Dt_Atual.place(x=60, y=3)
-#Dt_Atual.bind("<Tab>", Cursor_Num_Ped)
 # ---------------------------------------------------------------------------------------------------------------------
 # ----- LABELFRAME PEDIDOS --------------------------------------------------------------------------------------------
 # Label e Entry do NÚMERO DO PEDIDO
@@ -155,50 +259,59 @@ LblCod_Nota.place(x=5, y=8)
 EntCod_Nota = Entry(Fr_Cabecalho, font=Fonte12, width=14, textvariable=Var_Cod_Nota, justify=CENTER)
 EntCod_Nota.config(validatecommand=QTDE_Number, validate='key')
 EntCod_Nota.place(x=105, y=8)
+EntCod_Nota.focus()
+EntCod_Nota.bind("<Tab>", Focus_ID_Forn)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 # ----- LABELFRAME INFORMAÇÕES DO CLIENTE -----------------------------------------------------------------------------
 Var_Cod_Forn = StringVar()
 Lbl_Cod_Fornec = Label(FrInf_Cli, text="CÓDIGO:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Cod_Fornec.place(x=5, y=20)
-Ent_Cod_Fornec = Entry(FrInf_Cli, font=Fonte11, width=12, disabledbackground=Cinza90, validate='key')
-Ent_Cod_Fornec.config(disabledforeground=Branco, validatecommand=QTDE_Number, textvariable=Var_Cod_Forn)
+Ent_Cod_Fornec = Entry(FrInf_Cli, font=Fonte11, width=12, disabledbackground=Cinza60, validate='key', justify=CENTER)
+Ent_Cod_Fornec.config(disabledforeground=Preto, validatecommand=QTDE_Number, textvariable=Var_Cod_Forn)
 Ent_Cod_Fornec.place(x=90, y=20)
+Ent_Cod_Fornec.bind("<Return>", Ident_Fornecedor)
 # ---------------------------------------------------------------------------------------------------------------------
+Var_Forn_Name = StringVar()
 Lbl_Nome_Fornec = Label(FrInf_Cli, text="RAZÃO SOCIAL:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Nome_Fornec.place(x=5, y=60)
-Ent_Nome_Fornec = Entry(FrInf_Cli, font=Fonte11, width=38, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Ent_Nome_Fornec = Entry(FrInf_Cli, font=Fonte11, width=38, state=DISABLED, disabledbackground=Cinza60)
+Ent_Nome_Fornec.config(disabledforeground=Preto, textvariable=Var_Forn_Name)
 Ent_Nome_Fornec.place(x=130, y=60)
 # ---------------------------------------------------------------------------------------------------------------------
+Var_Forn_Rua = StringVar()
 Lbl_Rua_Fornec = Label(FrInf_Cli, text="RUA:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Rua_Fornec.place(x=5, y=90)
-Ent_Rua_Fornec = Entry(FrInf_Cli, font=Fonte11, width=35, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Ent_Rua_Fornec = Entry(FrInf_Cli, font=Fonte11, width=35, state=DISABLED, disabledbackground=Cinza60)
+Ent_Rua_Fornec.config(disabledforeground=Preto, textvariable=Var_Forn_Rua)
 Ent_Rua_Fornec.place(x=50, y=90)
 # ---------------------------------------------------------------------------------------------------------------------
+Var_Forn_Num = StringVar()
 Lbl_Num_Fornec = Label(FrInf_Cli, text="N°", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Num_Fornec.place(x=345, y=90)
-Ent_Num_Fornec = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza90)
-Ent_Num_Fornec.config(disabledforeground=Branco, validate='key', validatecommand=QTDE_Number)
+Ent_Num_Fornec = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza60)
+Ent_Num_Fornec.config(disabledforeground=Preto, textvariable=Var_Forn_Num)
 Ent_Num_Fornec.place(x=378, y=90)
 # ---------------------------------------------------------------------------------------------------------------------
+Var_Forn_Bairro = StringVar()
 Lbl_Bairro_Fornec = Label(FrInf_Cli, text="BAIRRO:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Bairro_Fornec.place(x=5, y=120)
-Ent_Bairro_Fornec = Entry(FrInf_Cli, font=Fonte11, width=15, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Ent_Bairro_Fornec = Entry(FrInf_Cli, font=Fonte11, width=15, state=DISABLED, disabledbackground=Cinza60)
+Ent_Bairro_Fornec.config(disabledforeground=Preto, textvariable=Var_Forn_Bairro)
 Ent_Bairro_Fornec.place(x=75, y=120)
 # ---------------------------------------------------------------------------------------------------------------------
+Var_Forn_City = StringVar()
 Lbl_Cidade_Fornec = Label(FrInf_Cli, text="CIDADE:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_Cidade_Fornec.place(x=210, y=120)
-Ent_Cidade_Fornec = Entry(FrInf_Cli, font=Fonte11, width=19, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Ent_Cidade_Fornec = Entry(FrInf_Cli, font=Fonte11, width=19, state=DISABLED, disabledbackground=Cinza60)
+Ent_Cidade_Fornec.config(disabledforeground=Preto, textvariable=Var_Forn_City)
 Ent_Cidade_Fornec.place(x=281, y=120)
 # ---------------------------------------------------------------------------------------------------------------------
+Var_Id_Colaborador = StringVar()
 Lbl_User = Label(FrInf_Cli, text="COLABORADOR:", bg=Cinza_Novo, fg=Branco, font=Fonte11B)
 Lbl_User.place(x=5, y=150)
-Ent_User = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza90)
-Ent_User.config(validatecommand=QTDE_Number, disabledforeground=Branco, validate='key')
+Ent_User = Entry(FrInf_Cli, font=Fonte11, width=7, state=DISABLED, disabledbackground=Cinza60, justify=CENTER)
+Ent_User.config(validatecommand=QTDE_Number, disabledforeground=Branco, validate='key', textvariable=Var_Id_Colaborador)
 Ent_User.place(x=140, y=150)
 # ---------------------------------------------------------------------------------------------------------------------
 # ----- DADOS DA ULTIMA COMPRA ----------------------------------------------------------------------------------------
@@ -206,22 +319,22 @@ Ent_User.place(x=140, y=150)
 Lbl_Data_Ult_Compra = Label(FrInf_Ult_Compra, font=Fonte11B, text="DATA:", bg=Cinza_Novo, fg=Branco)
 Lbl_Data_Ult_Compra.place(x=5, y=3)
 # 1° Entry
-Dia_ULt_Compra = Entry(FrInf_Ult_Compra, font=Fonte12, width=2, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Dia_ULt_Compra = Entry(FrInf_Ult_Compra, font=Fonte12, width=2, state=DISABLED, disabledbackground=Cinza60,
+                     disabledforeground=Preto)
 Dia_ULt_Compra.place(x=70, y=3)
 # Label da 1° Barra da data
 Barra_1 = Label(FrInf_Ult_Compra, text="/", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 Barra_1.place(x=96, y=3)
 # Entry do Mes da ultima compra
-Mes_ULt_Compra = Entry(FrInf_Ult_Compra, font=Fonte12, width=2, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Mes_ULt_Compra = Entry(FrInf_Ult_Compra, font=Fonte12, width=2, state=DISABLED, disabledbackground=Cinza60,
+                     disabledforeground=Preto)
 Mes_ULt_Compra.place(x=110, y=3)
 # Label da 2° Barra da data
 Barra_2 = Label(FrInf_Ult_Compra, text="/", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 Barra_2.place(x=136, y=3)
 # Entry do Ano da ultima compra
-Ano_ULt_Compra = Entry(FrInf_Ult_Compra, font=Fonte12, width=4, state=DISABLED, disabledbackground=Cinza90,
-                     disabledforeground=Branco)
+Ano_ULt_Compra = Entry(FrInf_Ult_Compra, font=Fonte12, width=4, state=DISABLED, disabledbackground=Cinza60,
+                     disabledforeground=Preto)
 Ano_ULt_Compra.place(x=150, y=3)
 # ---------------------------------------------------------------------------------------------------------------------
 # ----- LABELFRAME INSERIR PRODUTOS -----------------------------------------------------------------------------------
@@ -232,6 +345,7 @@ LblCod_Prod.place(x=5, y=10)
 EntCod_Prod = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Bar_Prod, width=20, justify=CENTER, validate='key')
 EntCod_Prod.config(disabledbackground=Cinza90, validatecommand=QTDE_Number)
 EntCod_Prod.place(x=130, y=10)
+EntCod_Prod.bind("<Return>", Descricao_Prod)
 # ---------------------------------------------------------------------------------------------------------------------
 # Imagem da Descrição do Produto
 Img_Descricao = Label(FrInsert_Ped, bg=Cinza_Novo, fg=Branco, font=Fonte11B, width=27)
@@ -245,15 +359,17 @@ LblQtde.place(x=5, y=40)
 EntQtde = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Qtde, width=4, justify=CENTER, validate='key')
 EntQtde.config(state=DISABLED, disabledbackground=Cinza90, validatecommand=QTDE_Number)
 EntQtde.place(x=85, y=40)
+EntQtde.bind("<Return>", Qtde_Prod)
 # ---------------------------------------------------------------------------------------------------------------------
 # Label e Entry Preço do Item
 Var_Preco_Unt = StringVar()
-Var_Preco_Unt.set("")
+Var_Preco_Unt.set("0.00")
 LblPreco_Unt = Label(FrInsert_Ped, text="PREÇO:", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 LblPreco_Unt.place(x=5, y=70)
-EntPreco_Unt = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Preco_Unt, width=10, justify=CENTER,
-                     state=DISABLED, disabledbackground=Cinza90, disabledforeground=Branco)
+EntPreco_Unt = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Preco_Unt, width=10, justify=CENTER, state=DISABLED)
+EntPreco_Unt.config(disabledbackground=Cinza90, disabledforeground=Preto, validate="key", validatecommand=Valor_float)
 EntPreco_Unt.place(x=85, y=70)
+EntPreco_Unt.bind("<Return>", Tot_por_Prod)
 # ---------------------------------------------------------------------------------------------------------------------
 # Label e Entry Desconto do Item
 Var_Desc = StringVar()
@@ -261,7 +377,7 @@ Var_Desc.set("")
 LblDesc_Iten = Label(FrInsert_Ped, text="DESC:", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 LblDesc_Iten.place(x=5, y=100)
 EntDesc = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Desc, width=10, justify=CENTER, state=DISABLED)
-EntDesc.config(disabledbackground=Cinza90, disabledforeground=Branco, validatecommand=QTDE_Number)
+EntDesc.config(disabledbackground=Cinza90, disabledforeground=Preto, validatecommand=QTDE_Number)
 EntDesc.place(x=85, y=100)
 # ---------------------------------------------------------------------------------------------------------------------
 # Label e Entry Total do Item
@@ -270,7 +386,7 @@ Var_Total.set("")
 LblTotal = Label(FrInsert_Ped, text="TOTAL:", bg=Cinza_Novo, fg=Branco, font=Fonte12B)
 LblTotal.place(x=5, y=130)
 EntTotal = Entry(FrInsert_Ped, font=Fonte12, textvariable=Var_Total, width=10, justify=CENTER, state=DISABLED,
-                    disabledbackground=Cinza90, disabledforeground=Branco)
+                    disabledbackground=Cinza90, disabledforeground=Preto)
 EntTotal.place(x=85, y=130)
 # ---------------------------------------------------------------------------------------------------------------------
 # Botão Inserir
@@ -294,12 +410,12 @@ tree_Fornecedor.heading('#4', text='VALOR TOTAL', anchor=CENTER)
 
 tree_Fornecedor.column('#4', stretch=YES, width=170, minwidth=170, anchor=CENTER)
 tree_Fornecedor.column('#3', stretch=YES, width=140, minwidth=140, anchor=CENTER)
-tree_Fornecedor.column('#2', stretch=YES, width=360, minwidth=360, anchor=W)
-tree_Fornecedor.column('#1', stretch=YES, width=100, minwidth=100, anchor=CENTER)
+tree_Fornecedor.column('#2', stretch=YES, width=300, minwidth=300, anchor=W)
+tree_Fornecedor.column('#1', stretch=YES, width=160, minwidth=160, anchor=CENTER)
 tree_Fornecedor.column('#0', stretch=YES, width=60, minwidth=60, anchor=CENTER)
 tree_Fornecedor.place(x=0, y=5)
-tree_Fornecedor.tag_configure('MonoMetas', background=Branco, font=Fonte12, foreground=Preto)
-tree_Fornecedor.tag_configure('oddrow', background=Cinza60, font=Fonte12, foreground=Preto)
+#tree_Fornecedor.tag_configure('MonoMetas', background=Branco, font=Fonte12, foreground=Preto)
+tree_Fornecedor.tag_configure('oddrow', background=Cinza40, font=Fonte12, foreground=Branco)
 barra3 = Scrollbar(tree_Fornecedor, orient='vertical', command=tree_Fornecedor.yview)
 barra3.place(x=828, y=1, height=225)
 tree_Fornecedor.configure(yscrollcommand=barra3.set)

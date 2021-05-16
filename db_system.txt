@@ -97,3 +97,28 @@ CREATE TABLE bd_system.sale (
  updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
  PRIMARY KEY (id_ind))
  ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+ CREATE TABLE bd_system.itens_note(
+ id_item INTEGER(12) NOT NULL AUTO_INCREMENT,
+ cod_note_item integer(12) NOT NULL,
+ bar_code_prod VARCHAR(20),
+ qtde VARCHAR(10),
+ value_prod DECIMAL(10,2),
+ value_tot DECIMAL(10,2),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_item))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
+
+
+ CREATE TABLE bd_system.note(
+ id_note integer(12) NOT NULL AUTO_INCREMENT,
+ cod_note VARCHAR(20),
+ id_fornec VARCHAR(20),
+ data DATE,
+ value_tot DECIMAL(10,2),
+ created_at timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+ PRIMARY KEY (id_note))
+ ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;

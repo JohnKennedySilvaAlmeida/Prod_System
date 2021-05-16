@@ -53,9 +53,15 @@ def Row_Down_Button_3(event=None):
     Row_Relatorios.config(bg=Amarelo_Novo)
 
 def Row_Up_Button_4(event=None):
-    Row_Suporte.config(bg=Branco)
+    Row_Lancamento.config(bg=Branco)
 
 def Row_Down_Button_4(event=None):
+    Row_Lancamento.config(bg=Amarelo_Novo)
+
+def Row_Up_Button_5(event=None):
+    Row_Suporte.config(bg=Branco)
+
+def Row_Down_Button_5(event=None):
     Row_Suporte.config(bg=Amarelo_Novo)
 
 def Register_Group(event=None):
@@ -81,6 +87,9 @@ def Register_Users(event=None):
 
 def Consulta_Prod(event=None):
     import Consulta_Prod
+
+def Register_Note(event=None):
+    import Entry_Note
 
 def Register_Store(event=None):
     import Register_Store
@@ -131,8 +140,11 @@ Row_Consultas.place(x=177, y=91, width=90, height=4)
 Row_Relatorios = Label(Windows, bg=Amarelo_Novo)
 Row_Relatorios.place(x=282, y=91, width=105, height=4)
 # ---------------------------------------------------------------------------------------------------------------------
+Row_Lancamento = Label(Windows, bg=Amarelo_Novo)
+Row_Lancamento.place(x=407, y=91, width=120, height=4)
+# ---------------------------------------------------------------------------------------------------------------------
 Row_Suporte = Label(Windows, bg=Amarelo_Novo)
-Row_Suporte.place(x=408, y=91, width=76, height=4)
+Row_Suporte.place(x=548, y=91, width=76, height=4)
 # ---------------------------------------------------------------------------------------------------------------------
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 # Criando MENU Arquivo
@@ -160,11 +172,20 @@ Relatorios.bind("<Leave>", Row_Down_Button_3)  # Ação Para Desaparecer a linha
 Relatorios.menu = Menu(Relatorios, background=Cinza60, fg=Branco, tearoff=0, activebackground=Cinza_Novo)
 Relatorios["menu"] = Relatorios.menu  # Criando Atributo menu pro MENU Relatorios
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+Lancamento = Menubutton(Windows, text="LANÇAMENTO", background=Cinza_Novo, foreground=Branco, font=Fonte_teste,
+                     activebackground=Cinza_Novo, activeforeground=Branco)
+Lancamento.place(x=400, y=68, height=20)
+Lancamento.bind("<Enter>", Row_Up_Button_4)  # Ação Para Aparecer a linha embaixo da Label
+Lancamento.bind("<Leave>", Row_Down_Button_4)  # Ação Para Desaparecer a linha embaixo da Label
+Lancamento.menu = Menu(Lancamento, background=Cinza_Novo, fg=Branco, tearoff=0, activebackground=Cinza40)
+Lancamento["menu"] = Lancamento.menu  # Criando Atributo menu pro MENU Relatorios
+# -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 Suporte = Menubutton(Windows, text="SUPORTE", background=Cinza_Novo, foreground=Branco, font=Fonte_teste,
                      activebackground=Cinza_Novo, activeforeground=Branco)
-Suporte.place(x=400, y=68, height=20)
-Suporte.bind("<Enter>", Row_Up_Button_4)  # Ação Para Aparecer a linha embaixo da Label
-Suporte.bind("<Leave>", Row_Down_Button_4)  # Ação Para Desaparecer a linha embaixo da Label
+Suporte.place(x=542, y=68, height=20)
+Suporte.bind("<Enter>", Row_Up_Button_5)  # Ação Para Aparecer a linha embaixo da Label
+Suporte.bind("<Leave>", Row_Down_Button_5)  # Ação Para Desaparecer a linha embaixo da Label
 Suporte.menu = Menu(Suporte, background=Cinza_Novo, fg=Branco, tearoff=0, activebackground=Cinza40)
 Suporte["menu"] = Suporte.menu  # Criando Atributo menu pro MENU Historicos
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -186,6 +207,10 @@ UsuarioMenu.add_command(label='EXCLUIR', font=Fonte_teste)
 GrupoMenu = Menu(Arquivo, background=Cinza_Novo, fg=Branco, tearoff=False, activebackground=Cinza40)
 GrupoMenu.add_command(label='NOVO', font=Fonte_teste, command=Register_Group)
 GrupoMenu.add_command(label='EXCLUIR', font=Fonte_teste, command=Delete_Group)
+# ---------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
+# Criando Inserir Nota
+Lancamento.menu.add_command(label='NOTA', font=Fonte_teste, command=Register_Note, activebackground=Cinza40)
 # ---------------------------------------------------------------------------------------------------------------------
 # ---------------------------------------------------------------------------------------------------------------------
 # Criando Produtos Menu com funções NOVO e EXCLUIR
