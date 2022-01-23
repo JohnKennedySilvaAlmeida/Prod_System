@@ -1,4 +1,4 @@
-# ------------ TELA DE CONSULTA PRODUTOS POR GRUPO --------------------------------------------------------------------
+# ------------ TELA DE CONSULTA PRODUTOS POR GRUPO 
 from tkinter.ttk import *
 from tkinter import *
 from tkinter import messagebox
